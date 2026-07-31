@@ -16,6 +16,7 @@ import { RolePicker } from '@/components/RolePicker';
 import { NumberField } from '@/components/NumberField';
 import { TextField } from '@/components/TextField';
 import { PrimaryButton } from '@/components/PrimaryButton';
+import { TextLinkButton } from '@/components/TextLinkButton';
 import { ScreenBackground } from '@/components/ScreenBackground';
 import { BRAND } from '@/constants/defaults';
 import { useAppState } from '@/context/AppContext';
@@ -152,17 +153,20 @@ export default function SettingsScreen() {
 
           {error ? <Text style={styles.error}>{error}</Text> : null}
 
+          <TextLinkButton
+            label="How metrics are calculated →"
+            onPress={() => router.push('/dictionary')}
+            style={styles.dictionaryLink}
+          />
+
           <View style={styles.about}>
             <Text style={styles.aboutTitle}>About {BRAND.appName}</Text>
             <Text style={styles.aboutText}>{BRAND.tagline}</Text>
             <Text style={styles.aboutText}>
               Version 0.2 · {BRAND.company}
             </Text>
-            <Text style={styles.aboutFormula}>
-              Effective rate = base rate + (commission ÷ hours)
-            </Text>
-            <Text style={styles.aboutFormula}>
-              Attachment rate = accessories sold ÷ shoes sold
+            <Text style={styles.aboutText}>
+              A performance journal — not a payment processor.
             </Text>
           </View>
         </ScrollView>
@@ -192,6 +196,9 @@ const styles = StyleSheet.create({
   saveButton: {
     marginTop: spacing.md,
   },
+  dictionaryLink: {
+    marginTop: spacing.lg,
+  },
   error: {
     fontFamily: fonts.body,
     fontSize: 13,
@@ -217,12 +224,5 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     lineHeight: 20,
     marginBottom: spacing.xs,
-  },
-  aboutFormula: {
-    fontFamily: fonts.body,
-    fontSize: 12,
-    color: colors.textMuted,
-    marginTop: spacing.md,
-    fontStyle: 'italic',
   },
 });

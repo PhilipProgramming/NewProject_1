@@ -79,6 +79,12 @@ export default function RootLayout() {
             title: 'Day Detail',
           }}
         />
+        <Stack.Screen
+          name="dictionary"
+          options={{
+            title: 'Data Dictionary',
+          }}
+        />
       </Stack>
     </AppProvider>
   );
