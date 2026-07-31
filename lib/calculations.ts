@@ -47,7 +47,7 @@ export function calculateCommissionEarned(
 }
 
 /**
- * FAR (Footwear Attach Rate) = accessories sold / shoes sold.
+ * Attachment rate = accessories sold / shoes sold (formula configurable per store later).
  * V0.1 formula is defined here so it can evolve without UI changes.
  */
 export function calculateFar(

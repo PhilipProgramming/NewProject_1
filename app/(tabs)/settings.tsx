@@ -162,7 +162,7 @@ export default function SettingsScreen() {
               Effective rate = base rate + (commission ÷ hours)
             </Text>
             <Text style={styles.aboutFormula}>
-              FAR = accessories sold ÷ shoes sold
+              Attachment rate = accessories sold ÷ shoes sold
             </Text>
           </View>
         </ScrollView>

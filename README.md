@@ -32,7 +32,7 @@ Then press `w` for web, scan the QR code with Expo Go on your phone, or use an e
 | Goal progress | total sales ÷ daily goal |
 | Average transaction value (ATV) | total sales ÷ transactions |
 | Commission earned | total sales × (commission rate ÷ 100) |
-| FAR (Footwear Attach Rate) | accessories sold ÷ shoes sold |
+| Attachment rate | accessories sold ÷ shoes sold |
 
 ## Architecture
 
@@ -81,7 +81,7 @@ Days are keyed by local calendar date (`YYYY-MM-DD`).
 - [ ] Log today's activity → Dashboard updates KPIs
 - [ ] Change commission rate → commission on Dashboard recalculates without re-logging sales
 - [ ] Log a day → appears in History → tap row → Day Detail shows same numbers
-- [ ] FAR shows 0 when shoes sold is 0
+- [ ] Attachment rate shows 0 when shoes sold is 0
 - [ ] ATV shows 0 when transactions is 0
 - [ ] Invalid inputs show field errors on Log screen
 

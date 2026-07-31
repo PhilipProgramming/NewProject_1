@@ -10,7 +10,6 @@ import {
 import { MetricCard } from '@/components/MetricCard';
 import { ProgressBar } from '@/components/ProgressBar';
 import { ScreenBackground } from '@/components/ScreenBackground';
-import { ROLE_LABELS } from '@/constants/defaults';
 import { useAppState } from '@/context/AppContext';
 import { calculateMetrics } from '@/lib/calculations';
 import { formatDisplayDate } from '@/lib/dates';
@@ -114,12 +113,10 @@ export default function DayDetailScreen() {
           <MetricCard
             label="Commission"
             value={formatCurrency(metrics.commissionEarned)}
-            hint={`${settings.commissionRate}% rate`}
           />
           <MetricCard
-            label="FAR"
+            label="Attachment rate"
             value={formatFar(metrics.far)}
-            hint="Accessories ÷ shoes"
           />
           <MetricCard
             label="Goal progress"
@@ -132,7 +129,6 @@ export default function DayDetailScreen() {
           <MetricCard
             label="Base rate"
             value={formatCurrency(metrics.baseHourlyRate) + '/hr'}
-            hint={ROLE_LABELS[settings.role]}
           />
           <MetricCard
             label="Base pay"

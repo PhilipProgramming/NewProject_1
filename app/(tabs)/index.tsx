@@ -13,7 +13,6 @@ import { MetricCard } from '@/components/MetricCard';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { ProgressBar } from '@/components/ProgressBar';
 import { ScreenBackground } from '@/components/ScreenBackground';
-import { ROLE_LABELS } from '@/constants/defaults';
 import { useAppState } from '@/context/AppContext';
 import { useTodayMetrics } from '@/hooks/useTodayMetrics';
 import { colors, fonts, spacing } from '@/constants/theme';
@@ -23,7 +22,6 @@ import {
   formatFar,
   formatHourlyRate,
   formatHours,
-  formatPercent,
 } from '@/lib/format';
 
 /**
@@ -86,12 +84,10 @@ export default function DashboardScreen() {
             <MetricCard
               label="Avg transaction"
               value={formatCurrency(metrics.averageTransactionValue)}
-              hint="Sales ÷ transactions"
             />
             <MetricCard
               label="Commission"
               value={formatCurrency(metrics.commissionEarned)}
-              hint={`${settings.commissionRate}% of sales`}
             />
             <MetricCard
               label="Shoes sold"
@@ -102,14 +98,12 @@ export default function DashboardScreen() {
               value={formatCount(activity.accessoriesSold)}
             />
             <MetricCard
-              label="FAR"
+              label="Attachment rate"
               value={formatFar(metrics.far)}
-              hint="Accessories ÷ shoes"
             />
             <MetricCard
               label="Goal"
               value={formatCurrency(settings.dailySalesGoal)}
-              hint={formatPercent(metrics.goalProgress) + ' reached'}
             />
           </View>
         </Animated.View>
@@ -127,17 +121,14 @@ export default function DashboardScreen() {
             <MetricCard
               label="Base rate"
               value={formatCurrency(metrics.baseHourlyRate) + '/hr'}
-              hint={ROLE_LABELS[settings.role]}
             />
             <MetricCard
               label="Base pay"
               value={formatCurrency(metrics.basePay)}
-              hint="Rate × hours"
             />
             <MetricCard
               label="Total earnings"
               value={formatCurrency(metrics.totalEarnings)}
-              hint="Base pay + commission"
             />
             <MetricCard
               label="Effective rate"
@@ -145,7 +136,6 @@ export default function DashboardScreen() {
                 metrics.effectiveHourlyRate,
                 activity.hoursWorked,
               )}
-              hint="Total earnings ÷ hours"
             />
           </View>
         </Animated.View>
