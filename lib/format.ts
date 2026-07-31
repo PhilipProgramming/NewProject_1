@@ -21,3 +21,21 @@ export function formatCount(value: number): string {
     maximumFractionDigits: 0,
   }).format(value);
 }
+
+/** Hours with up to one decimal, e.g. "7.5 hrs". */
+export function formatHours(value: number): string {
+  if (value <= 0) {
+    return '0 hrs';
+  }
+  const formatted =
+    value % 1 === 0 ? String(value) : value.toFixed(1).replace(/\.0$/, '');
+  return `${formatted} hrs`;
+}
+
+/** Effective hourly rate, or em dash when not calculable. */
+export function formatHourlyRate(value: number, hoursWorked: number): string {
+  if (hoursWorked <= 0) {
+    return '—';
+  }
+  return `${formatCurrency(value)}/hr`;
+}

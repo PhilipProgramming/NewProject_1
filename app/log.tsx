@@ -26,7 +26,7 @@ import {
 } from '@/lib/validation';
 
 /**
- * Log screen — manual entry for today's four performance inputs.
+ * Log screen — manual entry for today's performance inputs including hours worked.
  * Opened from Dashboard via stack push (modal presentation).
  */
 export default function LogScreen() {
@@ -37,10 +37,10 @@ export default function LogScreen() {
   const [transactions, setTransactions] = useState('');
   const [shoesSold, setShoesSold] = useState('');
   const [accessoriesSold, setAccessoriesSold] = useState('');
+  const [hoursWorked, setHoursWorked] = useState('');
   const [errors, setErrors] = useState<FieldErrors>({});
   const [initialized, setInitialized] = useState(false);
 
-  // Pre-fill form when today's data already exists (runs once after load).
   useEffect(() => {
     if (!isLoading && !initialized) {
       const values = activityToFormValues(activity);
@@ -48,6 +48,7 @@ export default function LogScreen() {
       setTransactions(values.transactions);
       setShoesSold(values.shoesSold);
       setAccessoriesSold(values.accessoriesSold);
+      setHoursWorked(values.hoursWorked);
       setInitialized(true);
     }
   }, [isLoading, initialized, activity]);
@@ -58,6 +59,7 @@ export default function LogScreen() {
       transactions,
       shoesSold,
       accessoriesSold,
+      hoursWorked,
     });
 
     setErrors(result.errors);
@@ -95,6 +97,13 @@ export default function LogScreen() {
           <BrandHeader subtitle="Log today's activity" />
           <Text style={styles.date}>{formatDisplayDate(dateKey)}</Text>
 
+          <NumberField
+            label="Hours worked"
+            value={hoursWorked}
+            onChangeText={setHoursWorked}
+            keyboardType="decimal-pad"
+            error={errors.hoursWorked}
+          />
           <NumberField
             label="Total sales amount"
             value={totalSales}

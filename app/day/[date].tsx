@@ -10,6 +10,7 @@ import {
 import { MetricCard } from '@/components/MetricCard';
 import { ProgressBar } from '@/components/ProgressBar';
 import { ScreenBackground } from '@/components/ScreenBackground';
+import { ROLE_LABELS } from '@/constants/defaults';
 import { useAppState } from '@/context/AppContext';
 import { calculateMetrics } from '@/lib/calculations';
 import { formatDisplayDate } from '@/lib/dates';
@@ -17,9 +18,29 @@ import {
   formatCount,
   formatCurrency,
   formatFar,
+  formatHourlyRate,
+  formatHours,
   formatPercent,
 } from '@/lib/format';
 import { colors, fonts, spacing } from '@/constants/theme';
+import type { ActivityInput } from '@/types/models';
+
+/** Ensure older saved days without hoursWorked still calculate correctly. */
+function toActivityInput(day: {
+  totalSales: number;
+  transactions: number;
+  shoesSold: number;
+  accessoriesSold: number;
+  hoursWorked?: number;
+}): ActivityInput {
+  return {
+    totalSales: day.totalSales,
+    transactions: day.transactions,
+    shoesSold: day.shoesSold,
+    accessoriesSold: day.accessoriesSold,
+    hoursWorked: day.hoursWorked ?? 0,
+  };
+}
 
 /**
  * Day detail — read-only breakdown for a single past day.
@@ -48,7 +69,8 @@ export default function DayDetailScreen() {
     );
   }
 
-  const metrics = calculateMetrics(day, settings);
+  const activity = toActivityInput(day);
+  const metrics = calculateMetrics(activity, settings);
 
   return (
     <ScreenBackground>
@@ -61,6 +83,10 @@ export default function DayDetailScreen() {
 
         <Text style={styles.sectionTitle}>Activity</Text>
         <View style={styles.metricsGrid}>
+          <MetricCard
+            label="Hours worked"
+            value={formatHours(activity.hoursWorked)}
+          />
           <MetricCard
             label="Total sales"
             value={formatCurrency(day.totalSales)}
@@ -98,6 +124,30 @@ export default function DayDetailScreen() {
           <MetricCard
             label="Goal progress"
             value={formatPercent(metrics.goalProgress)}
+          />
+        </View>
+
+        <Text style={styles.sectionTitle}>Earnings</Text>
+        <View style={styles.metricsGrid}>
+          <MetricCard
+            label="Base rate"
+            value={formatCurrency(metrics.baseHourlyRate) + '/hr'}
+            hint={ROLE_LABELS[settings.role]}
+          />
+          <MetricCard
+            label="Base pay"
+            value={formatCurrency(metrics.basePay)}
+          />
+          <MetricCard
+            label="Total earnings"
+            value={formatCurrency(metrics.totalEarnings)}
+          />
+          <MetricCard
+            label="Effective rate"
+            value={formatHourlyRate(
+              metrics.effectiveHourlyRate,
+              activity.hoursWorked,
+            )}
           />
         </View>
       </ScrollView>

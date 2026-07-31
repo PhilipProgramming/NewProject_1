@@ -7,7 +7,7 @@ import {
   useReducer,
   type ReactNode,
 } from 'react';
-
+import { DEFAULT_SETTINGS } from '@/constants/defaults';
 import { getTodayKey } from '@/lib/dates';
 import {
   loadAppData,
@@ -98,11 +98,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
 }
 
 const initialState: AppState = {
-  settings: {
-    associateName: '',
-    dailySalesGoal: 1000,
-    commissionRate: 5,
-  },
+  settings: DEFAULT_SETTINGS,
   days: {},
   isLoading: true,
   isSaving: false,

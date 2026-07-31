@@ -21,6 +21,7 @@ export function validateActivityForm(input: {
   transactions: string;
   shoesSold: string;
   accessoriesSold: string;
+  hoursWorked: string;
 }): { data: ActivityInput | null; errors: FieldErrors } {
   const errors: FieldErrors = {};
 
@@ -44,6 +45,11 @@ export function validateActivityForm(input: {
     errors.accessoriesSold = 'Enter a valid count (0 or more).';
   }
 
+  const hoursWorked = parseNonNegative(input.hoursWorked);
+  if (hoursWorked === null) {
+    errors.hoursWorked = 'Enter valid hours (0 or more).';
+  }
+
   if (Object.keys(errors).length > 0) {
     return { data: null, errors };
   }
@@ -54,6 +60,7 @@ export function validateActivityForm(input: {
       transactions: Math.floor(transactions!),
       shoesSold: Math.floor(shoesSold!),
       accessoriesSold: Math.floor(accessoriesSold!),
+      hoursWorked: hoursWorked!,
     },
     errors: {},
   };
@@ -65,6 +72,7 @@ export function activityToFormValues(activity: ActivityInput): {
   transactions: string;
   shoesSold: string;
   accessoriesSold: string;
+  hoursWorked: string;
 } {
   return {
     totalSales: activity.totalSales > 0 ? String(activity.totalSales) : '',
@@ -73,5 +81,7 @@ export function activityToFormValues(activity: ActivityInput): {
     shoesSold: activity.shoesSold > 0 ? String(activity.shoesSold) : '',
     accessoriesSold:
       activity.accessoriesSold > 0 ? String(activity.accessoriesSold) : '',
+    hoursWorked:
+      activity.hoursWorked > 0 ? String(activity.hoursWorked) : '',
   };
 }

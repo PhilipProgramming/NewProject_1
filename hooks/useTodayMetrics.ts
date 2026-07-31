@@ -26,6 +26,7 @@ export function useTodayMetrics(): TodayMetrics {
         transactions: stored.transactions,
         shoesSold: stored.shoesSold,
         accessoriesSold: stored.accessoriesSold,
+        hoursWorked: stored.hoursWorked ?? 0,
       }
     : EMPTY_ACTIVITY;
 

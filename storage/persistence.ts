@@ -10,13 +10,21 @@ import type { DayActivity, Settings } from '@/types/models';
  * swap this file for an API client without rewriting UI code.
  */
 
+/** Backfill hoursWorked on days saved before V0.2. */
+function normalizeDay(raw: DayActivity): DayActivity {
+  return {
+    ...raw,
+    hoursWorked: raw.hoursWorked ?? 0,
+  };
+}
+
 export async function loadSettings(): Promise<Settings> {
   try {
     const raw = await AsyncStorage.getItem(STORAGE_KEYS.settings);
     if (!raw) {
       return DEFAULT_SETTINGS;
     }
-    const parsed = JSON.parse(raw) as Settings;
+    const parsed = JSON.parse(raw) as Partial<Settings>;
     return { ...DEFAULT_SETTINGS, ...parsed };
   } catch {
     return DEFAULT_SETTINGS;
@@ -33,7 +41,11 @@ export async function loadDays(): Promise<Record<string, DayActivity>> {
     if (!raw) {
       return {};
     }
-    return JSON.parse(raw) as Record<string, DayActivity>;
+    return Object.fromEntries(
+      Object.entries(JSON.parse(raw) as Record<string, DayActivity>).map(
+        ([key, day]) => [key, normalizeDay(day)],
+      ),
+    );
   } catch {
     return {};
   }

@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router';
+import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 import { BrandHeader } from '@/components/BrandHeader';
+import { RolePicker } from '@/components/RolePicker';
 import { NumberField } from '@/components/NumberField';
 import { TextField } from '@/components/TextField';
 import { PrimaryButton } from '@/components/PrimaryButton';
@@ -19,13 +20,14 @@ import { ScreenBackground } from '@/components/ScreenBackground';
 import { BRAND } from '@/constants/defaults';
 import { useAppState } from '@/context/AppContext';
 import { colors, fonts, spacing } from '@/constants/theme';
+import type { AssociateRole } from '@/types/models';
 import {
   validateActivityForm,
   type FieldErrors,
 } from '@/lib/validation';
 
 /**
- * Settings — configure daily goal, commission rate, and associate name.
+ * Settings — configure daily goal, commission rate, role, and associate name.
  * Changes persist to AsyncStorage via AppContext.updateSettings.
  */
 export default function SettingsScreen() {
@@ -35,7 +37,13 @@ export default function SettingsScreen() {
   const [associateName, setAssociateName] = useState('');
   const [dailySalesGoal, setDailySalesGoal] = useState('');
   const [commissionRate, setCommissionRate] = useState('');
-  const [errors, setErrors] = useState<FieldErrors & { associateName?: string; dailySalesGoal?: string; commissionRate?: string }>({});
+  const [role, setRole] = useState<AssociateRole>('associate');
+  const [errors, setErrors] = useState<
+    FieldErrors & {
+      dailySalesGoal?: string;
+      commissionRate?: string;
+    }
+  >({});
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
@@ -43,6 +51,7 @@ export default function SettingsScreen() {
       setAssociateName(settings.associateName);
       setDailySalesGoal(String(settings.dailySalesGoal));
       setCommissionRate(String(settings.commissionRate));
+      setRole(settings.role);
       setInitialized(true);
     }
   }, [isLoading, initialized, settings]);
@@ -70,6 +79,7 @@ export default function SettingsScreen() {
         associateName: associateName.trim(),
         dailySalesGoal: goal,
         commissionRate: rate,
+        role,
       });
       Alert.alert('Saved', 'Your settings have been updated.');
     } catch {
@@ -108,6 +118,15 @@ export default function SettingsScreen() {
             Shown as a greeting on the Dashboard.
           </Text>
 
+          <RolePicker
+            label="Your role"
+            value={role}
+            onChange={setRole}
+          />
+          <Text style={styles.nameHint}>
+            Sets base hourly pay: $2 for associates, $4 for team leads.
+          </Text>
+
           <NumberField
             label="Daily sales goal ($)"
             value={dailySalesGoal}
@@ -135,11 +154,12 @@ export default function SettingsScreen() {
 
           <View style={styles.about}>
             <Text style={styles.aboutTitle}>About {BRAND.appName}</Text>
+            <Text style={styles.aboutText}>{BRAND.tagline}</Text>
             <Text style={styles.aboutText}>
-              {BRAND.tagline}
+              Version 0.2 · {BRAND.company}
             </Text>
-            <Text style={styles.aboutText}>
-              Version 0.1 · {BRAND.company}
+            <Text style={styles.aboutFormula}>
+              Effective rate = base rate + (commission ÷ hours)
             </Text>
             <Text style={styles.aboutFormula}>
               FAR = accessories sold ÷ shoes sold

@@ -1,5 +1,4 @@
 import { router } from 'expo-router';
-import { useEffect } from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -14,6 +13,7 @@ import { MetricCard } from '@/components/MetricCard';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { ProgressBar } from '@/components/ProgressBar';
 import { ScreenBackground } from '@/components/ScreenBackground';
+import { ROLE_LABELS } from '@/constants/defaults';
 import { useAppState } from '@/context/AppContext';
 import { useTodayMetrics } from '@/hooks/useTodayMetrics';
 import { colors, fonts, spacing } from '@/constants/theme';
@@ -21,6 +21,8 @@ import {
   formatCurrency,
   formatCount,
   formatFar,
+  formatHourlyRate,
+  formatHours,
   formatPercent,
 } from '@/lib/format';
 
@@ -108,6 +110,42 @@ export default function DashboardScreen() {
               label="Goal"
               value={formatCurrency(settings.dailySalesGoal)}
               hint={formatPercent(metrics.goalProgress) + ' reached'}
+            />
+          </View>
+        </Animated.View>
+
+        <Animated.View
+          entering={FadeInDown.delay(300).duration(500)}
+          style={styles.metricsSection}
+        >
+          <Text style={styles.sectionTitle}>Earnings</Text>
+          <View style={styles.metricsGrid}>
+            <MetricCard
+              label="Hours worked"
+              value={formatHours(activity.hoursWorked)}
+            />
+            <MetricCard
+              label="Base rate"
+              value={formatCurrency(metrics.baseHourlyRate) + '/hr'}
+              hint={ROLE_LABELS[settings.role]}
+            />
+            <MetricCard
+              label="Base pay"
+              value={formatCurrency(metrics.basePay)}
+              hint="Rate × hours"
+            />
+            <MetricCard
+              label="Total earnings"
+              value={formatCurrency(metrics.totalEarnings)}
+              hint="Base pay + commission"
+            />
+            <MetricCard
+              label="Effective rate"
+              value={formatHourlyRate(
+                metrics.effectiveHourlyRate,
+                activity.hoursWorked,
+              )}
+              hint="Total earnings ÷ hours"
             />
           </View>
         </Animated.View>
