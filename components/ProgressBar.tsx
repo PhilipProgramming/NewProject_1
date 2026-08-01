@@ -17,7 +17,7 @@ type ProgressBarProps = {
   label?: string;
 };
 
-const MARKER_SIZE = 112;
+const MARKER_SIZE = 140;
 const TRACK_HEIGHT = 14;
 const TRACK_ROW_HEIGHT = MARKER_SIZE + 8;
 
