@@ -33,5 +33,5 @@ export const ROLE_LABELS: Record<AssociateRole, string> = {
 export const BRAND = {
   appName: 'Pomegranate',
   company: 'Tantalus Incorporated',
-  tagline: 'Track today. Grow tomorrow.',
+  tagline: "for data that's out of reach",
 } as const;

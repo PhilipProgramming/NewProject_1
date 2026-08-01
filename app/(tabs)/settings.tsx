@@ -222,4 +222,12 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     marginBottom: spacing.xs,
   },
+  aboutTagline: {
+    fontFamily: fonts.body,
+    fontSize: 14,
+    color: colors.textMuted,
+    lineHeight: 20,
+    marginBottom: spacing.xs,
+    fontStyle: 'italic',
+  },
 });
