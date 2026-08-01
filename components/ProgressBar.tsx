@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
+import { images } from '@/constants/assets';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
 import { formatPercent } from '@/lib/format';
 
@@ -9,15 +10,22 @@ type ProgressBarProps = {
   label?: string;
 };
 
+const MARKER_SIZE = 36;
+
 /**
- * Visual goal progress bar. Clamps fill width at 100% but shows over-goal text.
+ * Goal progress bar with a pomegranate marker showing where you are on the track.
+ * The icon moves left-to-right as sales approach the daily goal.
  */
-export function ProgressBar({ progress, label = 'Daily goal progress' }: ProgressBarProps) {
-  const clampedWidth = Math.min(Math.max(progress, 0), 1);
+export function ProgressBar({
+  progress,
+  label = 'Daily goal progress',
+}: ProgressBarProps) {
+  const clampedProgress = Math.min(Math.max(progress, 0), 1);
   const percentLabel =
-    progress >= 1
-      ? `${formatPercent(1)}+`
-      : formatPercent(progress);
+    progress >= 1 ? `${formatPercent(1)}+` : formatPercent(progress);
+
+  // Center the marker on the progress point; clamp so edges aren't clipped.
+  const markerLeftPercent = clampedProgress * 100;
 
   return (
     <View style={styles.container}>
@@ -25,8 +33,25 @@ export function ProgressBar({ progress, label = 'Daily goal progress' }: Progres
         <Text style={styles.label}>{label}</Text>
         <Text style={styles.percent}>{percentLabel}</Text>
       </View>
-      <View style={styles.track}>
-        <View style={[styles.fill, { width: `${clampedWidth * 100}%` }]} />
+
+      <View style={styles.trackArea}>
+        <View style={styles.track}>
+          <View
+            style={[styles.fill, { width: `${clampedProgress * 100}%` }]}
+          />
+        </View>
+
+        <Image
+          source={images.pomegranateMarker}
+          style={[
+            styles.marker,
+            {
+              left: `${markerLeftPercent}%`,
+              transform: [{ translateX: -MARKER_SIZE / 2 }],
+            },
+          ]}
+          accessibilityLabel="Progress toward daily goal"
+        />
       </View>
     </View>
   );
@@ -52,6 +77,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.accent,
   },
+  trackArea: {
+    height: MARKER_SIZE + 4,
+    justifyContent: 'center',
+    // Room for the marker at 0% and 100% without clipping.
+    paddingHorizontal: MARKER_SIZE / 2,
+  },
   track: {
     height: 10,
     backgroundColor: colors.progressTrack,
@@ -62,5 +93,12 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: colors.progressFill,
     borderRadius: radius.sm,
+  },
+  marker: {
+    position: 'absolute',
+    width: MARKER_SIZE,
+    height: MARKER_SIZE,
+    top: 0,
+    resizeMode: 'contain',
   },
 });
