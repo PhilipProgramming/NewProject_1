@@ -161,12 +161,9 @@ export default function SettingsScreen() {
 
           <View style={styles.about}>
             <Text style={styles.aboutTitle}>About {BRAND.appName}</Text>
-            <Text style={styles.aboutText}>{BRAND.tagline}</Text>
+            <Text style={styles.aboutTagline}>{BRAND.tagline}</Text>
             <Text style={styles.aboutText}>
               Version 0.2 · {BRAND.company}
-            </Text>
-            <Text style={styles.aboutText}>
-              A performance journal — not a payment processor.
             </Text>
           </View>
         </ScrollView>
