@@ -1,4 +1,11 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import {
+  Image,
+  LayoutChangeEvent,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 import { images } from '@/constants/assets';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
@@ -10,22 +17,30 @@ type ProgressBarProps = {
   label?: string;
 };
 
-const MARKER_SIZE = 36;
+const MARKER_SIZE = 56;
+const TRACK_HEIGHT = 12;
+const TRACK_ROW_HEIGHT = MARKER_SIZE + 8;
 
 /**
- * Goal progress bar with a pomegranate marker showing where you are on the track.
- * The icon moves left-to-right as sales approach the daily goal.
+ * Goal progress bar with a pomegranate marker at the leading edge of progress.
+ * Fill and marker share the same pixel width so there is no gap between them.
  */
 export function ProgressBar({
   progress,
   label = 'Daily goal progress',
 }: ProgressBarProps) {
+  const [trackWidth, setTrackWidth] = useState(0);
   const clampedProgress = Math.min(Math.max(progress, 0), 1);
   const percentLabel =
     progress >= 1 ? `${formatPercent(1)}+` : formatPercent(progress);
 
-  // Center the marker on the progress point; clamp so edges aren't clipped.
-  const markerLeftPercent = clampedProgress * 100;
+  // Same pixel math for fill and marker — icon center sits on the true progress point.
+  const progressPx = trackWidth * clampedProgress;
+  const markerLeft = progressPx - MARKER_SIZE / 2;
+
+  function handleTrackLayout(event: LayoutChangeEvent) {
+    setTrackWidth(event.nativeEvent.layout.width);
+  }
 
   return (
     <View style={styles.container}>
@@ -35,23 +50,19 @@ export function ProgressBar({
       </View>
 
       <View style={styles.trackArea}>
-        <View style={styles.track}>
-          <View
-            style={[styles.fill, { width: `${clampedProgress * 100}%` }]}
-          />
-        </View>
+        <View style={styles.trackRow} onLayout={handleTrackLayout}>
+          <View style={styles.track}>
+            <View style={[styles.fill, { width: progressPx }]} />
+          </View>
 
-        <Image
-          source={images.pomegranateMarker}
-          style={[
-            styles.marker,
-            {
-              left: `${markerLeftPercent}%`,
-              transform: [{ translateX: -MARKER_SIZE / 2 }],
-            },
-          ]}
-          accessibilityLabel="Progress toward daily goal"
-        />
+          {trackWidth > 0 ? (
+            <Image
+              source={images.pomegranateMarker}
+              style={[styles.marker, { left: markerLeft }]}
+              accessibilityLabel="Progress toward daily goal"
+            />
+          ) : null}
+        </View>
       </View>
     </View>
   );
@@ -60,6 +71,7 @@ export function ProgressBar({
 const styles = StyleSheet.create({
   container: {
     marginBottom: spacing.lg,
+    overflow: 'visible',
   },
   header: {
     flexDirection: 'row',
@@ -78,13 +90,17 @@ const styles = StyleSheet.create({
     color: colors.accent,
   },
   trackArea: {
-    height: MARKER_SIZE + 4,
-    justifyContent: 'center',
-    // Room for the marker at 0% and 100% without clipping.
+    overflow: 'visible',
+    // Inset so the marker is not clipped at 0% or 100% on web.
     paddingHorizontal: MARKER_SIZE / 2,
   },
+  trackRow: {
+    height: TRACK_ROW_HEIGHT,
+    justifyContent: 'center',
+    overflow: 'visible',
+  },
   track: {
-    height: 10,
+    height: TRACK_HEIGHT,
     backgroundColor: colors.progressTrack,
     borderRadius: radius.sm,
     overflow: 'hidden',
@@ -96,9 +112,9 @@ const styles = StyleSheet.create({
   },
   marker: {
     position: 'absolute',
+    top: (TRACK_ROW_HEIGHT - MARKER_SIZE) / 2,
     width: MARKER_SIZE,
     height: MARKER_SIZE,
-    top: 0,
     resizeMode: 'contain',
   },
 });

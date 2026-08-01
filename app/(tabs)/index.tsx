@@ -52,7 +52,10 @@ export default function DashboardScreen() {
       >
         <BrandHeader subtitle={greeting} showDate />
 
-        <Animated.View entering={FadeInDown.duration(500)}>
+        <Animated.View
+          entering={FadeInDown.duration(500)}
+          style={styles.progressWrapper}
+        >
           <ProgressBar progress={metrics.goalProgress} />
         </Animated.View>
 
@@ -153,6 +156,10 @@ export default function DashboardScreen() {
 const styles = StyleSheet.create({
   scroll: {
     paddingBottom: spacing.xl,
+    overflow: 'visible',
+  },
+  progressWrapper: {
+    overflow: 'visible',
   },
   centered: {
     justifyContent: 'center',
