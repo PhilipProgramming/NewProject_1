@@ -160,7 +160,7 @@ export default function SettingsScreen() {
           />
 
           <View style={styles.about}>
-            <Text style={styles.aboutTitle}>About {BRAND.appName}</Text>
+            <Text style={styles.aboutTitle}>Pomegranate®</Text>
             <Text style={styles.aboutTagline}>{BRAND.tagline}</Text>
             <Text style={styles.aboutText}>
               Version 0.2 · {BRAND.company}
