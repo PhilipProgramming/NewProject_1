@@ -265,15 +265,15 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontFamily: fonts.displayRegular,
-    fontSize: 44,
+    fontSize: 66,
     color: colors.text,
     textAlign: 'center',
-    lineHeight: 52,
+    lineHeight: 78,
     letterSpacing: -0.3,
     marginBottom: spacing.lg,
   },
   headingPlaceholder: {
-    height: 52,
+    height: 78,
     marginBottom: spacing.lg,
   },
   basketPressable: {
@@ -305,18 +305,18 @@ const styles = StyleSheet.create({
   },
   startWrap: {
     marginTop: spacing.lg,
-    minHeight: 28,
+    minHeight: 56,
   },
   startPlaceholder: {
     marginTop: spacing.lg,
-    minHeight: 28,
+    minHeight: 56,
   },
   startText: {
     fontFamily: fonts.displayRegular,
-    fontSize: 20,
+    fontSize: 40,
     color: colors.textMuted,
     textAlign: 'center',
-    lineHeight: 28,
+    lineHeight: 56,
   },
   cursorVisible: {
     opacity: 1,
