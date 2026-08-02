@@ -16,6 +16,10 @@ export const colors = {
   border: '#E8E4DC',
   /** Minimal accent — used sparingly. */
   accent: '#4A4540',
+  /** Maison de Données navy — hover fills and selected states. */
+  brandBlue: '#072A6C',
+  /** Text on brandBlue backgrounds. */
+  textOnBrand: '#FFFFFF',
   /** Progress and positive signals. */
   signal: '#3D3D3D',
   error: '#8B4B4B',

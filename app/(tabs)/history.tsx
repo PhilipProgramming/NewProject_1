@@ -56,25 +56,41 @@ export default function HistoryScreen() {
             return (
               <Pressable
                 key={dateKey}
-                style={({ pressed }) => [
+                style={({ pressed, hovered }) => [
                   styles.row,
-                  pressed && styles.rowPressed,
+                  (hovered || pressed) && styles.rowActive,
                 ]}
                 onPress={() => router.push(`/day/${dateKey}`)}
               >
-                <View style={styles.rowMain}>
-                  <Text style={styles.rowDate}>
-                    {formatShortDate(dateKey)}
-                    {isToday ? ' · Today' : ''}
-                  </Text>
-                  <Text style={styles.rowSales}>
-                    {formatCurrency(day.totalSales)}
-                  </Text>
-                </View>
-                <Text style={styles.rowProgress}>
-                  {formatPercent(Math.min(metrics.goalProgress, 1))}
-                  {metrics.goalProgress > 1 ? '+' : ''} of goal
-                </Text>
+                {({ pressed, hovered }) => {
+                  const active = hovered || pressed;
+                  return (
+                    <>
+                      <View style={styles.rowMain}>
+                        <Text
+                          style={[styles.rowDate, active && styles.rowTextActive]}
+                        >
+                          {formatShortDate(dateKey)}
+                          {isToday ? ' · Today' : ''}
+                        </Text>
+                        <Text
+                          style={[styles.rowSales, active && styles.rowTextActive]}
+                        >
+                          {formatCurrency(day.totalSales)}
+                        </Text>
+                      </View>
+                      <Text
+                        style={[
+                          styles.rowProgress,
+                          active && styles.rowProgressActive,
+                        ]}
+                      >
+                        {formatPercent(Math.min(metrics.goalProgress, 1))}
+                        {metrics.goalProgress > 1 ? '+' : ''} of goal
+                      </Text>
+                    </>
+                  );
+                }}
               </Pressable>
             );
           })
@@ -100,8 +116,9 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     marginBottom: spacing.sm,
   },
-  rowPressed: {
-    opacity: 0.85,
+  rowActive: {
+    backgroundColor: colors.brandBlue,
+    borderColor: colors.brandBlue,
   },
   rowMain: {
     flexDirection: 'row',
@@ -119,9 +136,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.accent,
   },
+  rowTextActive: {
+    color: colors.textOnBrand,
+  },
   rowProgress: {
     fontFamily: fonts.body,
     fontSize: 13,
     color: colors.textMuted,
+  },
+  rowProgressActive: {
+    color: 'rgba(255, 255, 255, 0.85)',
   },
 });

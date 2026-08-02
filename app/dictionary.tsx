@@ -59,9 +59,9 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   disclaimer: {
-    backgroundColor: 'rgba(139, 21, 56, 0.2)',
+    backgroundColor: colors.brandBlue,
     borderWidth: 1,
-    borderColor: colors.primary,
+    borderColor: colors.brandBlue,
     borderRadius: 12,
     padding: spacing.md,
     marginBottom: spacing.md,
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   disclaimerText: {
     fontFamily: fonts.bodyMedium,
     fontSize: 14,
-    color: colors.text,
+    color: colors.textOnBrand,
     lineHeight: 21,
   },
   subtitle: {

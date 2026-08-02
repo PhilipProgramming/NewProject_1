@@ -9,7 +9,7 @@ type PrimaryButtonProps = {
   style?: ViewStyle;
 };
 
-/** Quiet editorial action — outline, no fill, restrained. */
+/** Quiet editorial action — outline at rest, navy fill on hover/press. */
 export function PrimaryButton({
   label,
   onPress,
@@ -18,16 +18,25 @@ export function PrimaryButton({
 }: PrimaryButtonProps) {
   return (
     <Pressable
-      style={({ pressed }) => [
+      style={({ pressed, hovered }) => [
         styles.button,
-        pressed && styles.pressed,
+        (hovered || pressed) && styles.buttonActive,
         disabled && styles.disabled,
         style,
       ]}
       onPress={onPress}
       disabled={disabled}
     >
-      <Text style={styles.label}>{label}</Text>
+      {({ pressed, hovered }) => (
+        <Text
+          style={[
+            styles.label,
+            (hovered || pressed) && styles.labelActive,
+          ]}
+        >
+          {label}
+        </Text>
+      )}
     </Pressable>
   );
 }
@@ -41,8 +50,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.background,
   },
-  pressed: {
-    opacity: 0.7,
+  buttonActive: {
+    backgroundColor: colors.brandBlue,
+    borderColor: colors.brandBlue,
   },
   disabled: {
     opacity: 0.4,
@@ -52,5 +62,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.text,
     letterSpacing: 0.2,
+  },
+  labelActive: {
+    color: colors.textOnBrand,
   },
 });

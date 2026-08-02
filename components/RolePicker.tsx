@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   optionSelected: {
-    borderColor: colors.primary,
-    backgroundColor: 'rgba(139, 21, 56, 0.25)',
+    borderColor: colors.brandBlue,
+    backgroundColor: colors.brandBlue,
   },
   optionText: {
     fontFamily: fonts.body,
@@ -78,6 +78,6 @@ const styles = StyleSheet.create({
   },
   optionTextSelected: {
     fontFamily: fonts.bodyBold,
-    color: colors.text,
+    color: colors.textOnBrand,
   },
 });
