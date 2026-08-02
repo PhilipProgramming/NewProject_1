@@ -8,18 +8,27 @@ type TextLinkButtonProps = {
   style?: ViewStyle;
 };
 
-/** Secondary text-style button for navigation links (e.g. open data dictionary). */
+/** Secondary navigation button — navy fill on hover/press like PrimaryButton. */
 export function TextLinkButton({ label, onPress, style }: TextLinkButtonProps) {
   return (
     <Pressable
-      style={({ pressed }) => [
+      style={({ pressed, hovered }) => [
         styles.button,
-        pressed && styles.pressed,
+        (hovered || pressed) && styles.buttonActive,
         style,
       ]}
       onPress={onPress}
     >
-      <Text style={styles.label}>{label}</Text>
+      {({ pressed, hovered }) => (
+        <Text
+          style={[
+            styles.label,
+            (hovered || pressed) && styles.labelActive,
+          ]}
+        >
+          {label}
+        </Text>
+      )}
     </Pressable>
   );
 }
@@ -34,12 +43,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.surface,
   },
-  pressed: {
-    opacity: 0.85,
+  buttonActive: {
+    backgroundColor: colors.brandBlue,
+    borderColor: colors.brandBlue,
   },
   label: {
     fontFamily: fonts.bodyMedium,
     fontSize: 15,
     color: colors.accent,
+  },
+  labelActive: {
+    color: colors.textOnBrand,
   },
 });

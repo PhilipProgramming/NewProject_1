@@ -28,7 +28,7 @@ export const METRIC_CATEGORY_LABELS: Record<MetricCategory, string> = {
 export const DICTIONARY_INTRO = {
   title: 'Data dictionary',
   disclaimer:
-    'Pomegranate is a performance journal — not a payment processor. ' +
+    "L'Étape is a performance journal — not a payment processor. " +
     'Figures here help you track and understand your day. Your store\'s ' +
     'official payroll system is the source of truth for what you are paid.',
   subtitle:
