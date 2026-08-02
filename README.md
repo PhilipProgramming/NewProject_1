@@ -65,6 +65,7 @@ Screens (app/) → Components → Hooks → Context → Storage (AsyncStorage)
 | Settings | `/settings` | Yes |
 | Log Activity | `/log` | Modal from Dashboard |
 | Day Detail | `/day/[date]` | Stack from History |
+| Data Dictionary | `/dictionary` | Stack from Settings |
 
 ## Data persistence
 
