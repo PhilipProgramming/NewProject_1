@@ -18,7 +18,6 @@ import { TextField } from '@/components/TextField';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { TextLinkButton } from '@/components/TextLinkButton';
 import { ScreenBackground } from '@/components/ScreenBackground';
-import { BRAND } from '@/constants/defaults';
 import { useAppState } from '@/context/AppContext';
 import { colors, fonts, spacing } from '@/constants/theme';
 import type { AssociateRole } from '@/types/models';
@@ -160,11 +159,11 @@ export default function SettingsScreen() {
           />
 
           <View style={styles.about}>
-            <Text style={styles.aboutTitle}>Pomegranate®</Text>
-            <Text style={styles.aboutTagline}>{BRAND.tagline}</Text>
-            <Text style={styles.aboutText}>
-              Version 0.2 · {BRAND.company}
+            <Text style={styles.aboutTitle}>
+              L&apos;Étape by Maison de Données
             </Text>
+            <Text style={styles.aboutTagline}>Analytics in steps</Text>
+            <Text style={styles.aboutText}>Version 0.3 // MdD 2026</Text>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

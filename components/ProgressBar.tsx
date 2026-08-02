@@ -22,7 +22,7 @@ const TRACK_HEIGHT = 14;
 const TRACK_ROW_HEIGHT = MARKER_SIZE + 8;
 
 /**
- * Goal progress bar with a pomegranate marker at the leading edge of progress.
+ * Goal progress bar with a blueberry marker at the leading edge of progress.
  * Fill and marker share the same pixel width so there is no gap between them.
  */
 export function ProgressBar({
@@ -57,7 +57,7 @@ export function ProgressBar({
 
           {trackWidth > 0 ? (
             <Image
-              source={images.pomegranateMarker}
+              source={images.progressMarker}
               style={[styles.marker, { left: markerLeft }]}
               accessibilityLabel="Progress toward daily goal"
             />
