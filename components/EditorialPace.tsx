@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontFamily: fonts.body,
-    fontSize: 13,
+    fontSize: 16,
     color: colors.textMuted,
     marginBottom: spacing.xs,
   },

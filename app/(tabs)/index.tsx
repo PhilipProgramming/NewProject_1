@@ -18,8 +18,8 @@ import { formatCurrency } from '@/lib/format';
 import { generateDailyObservation } from '@/lib/observations';
 
 /**
- * Today — daily briefing answering: "How am I doing today?"
- * Editorial layout: hero sales, goal pace, one observation.
+ * Today — daily briefing with sales, goal pace, and maison notes.
+ * Editorial layout: hero sales, goal pace, one insight.
  */
 export default function TodayScreen() {
   const { isLoading } = useAppState();
@@ -47,8 +47,6 @@ export default function TodayScreen() {
       >
         <BrandHeader subtitle="Today" showDate />
 
-        <Text style={styles.question}>How am I doing today?</Text>
-
         <View style={styles.heroBlock}>
           <Text style={styles.heroLabel}>Sales</Text>
           <Text style={styles.heroValue}>
@@ -66,7 +64,7 @@ export default function TodayScreen() {
         )}
 
         <View style={styles.observationBlock}>
-          <Text style={styles.observationLabel}>Observation</Text>
+          <Text style={styles.observationLabel}>Notes from the Maison</Text>
           <Text style={styles.observationText}>{observation}</Text>
         </View>
 
@@ -88,19 +86,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  question: {
-    fontFamily: fonts.displayRegular,
-    fontSize: 22,
-    color: colors.text,
-    lineHeight: 28,
-    marginBottom: spacing.xxl,
-  },
   heroBlock: {
     marginBottom: spacing.xxl,
   },
   heroLabel: {
     fontFamily: fonts.body,
-    fontSize: 13,
+    fontSize: 16,
     color: colors.textMuted,
     marginBottom: spacing.sm,
   },
@@ -128,7 +119,7 @@ const styles = StyleSheet.create({
   },
   observationLabel: {
     fontFamily: fonts.body,
-    fontSize: 13,
+    fontSize: 16,
     color: colors.textMuted,
     marginBottom: spacing.sm,
   },
