@@ -12,16 +12,21 @@ type BrandHeaderProps = {
 };
 
 /**
- * Hero-level brand block — Pomegranate should dominate the first viewport.
+ * Screen masthead — L'Étape / Maison de Données / page title.
+ * Optional date aligns with the subtitle row on the right.
  */
 export function BrandHeader({ subtitle, showDate = false }: BrandHeaderProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.brand}>{BRAND.appName}</Text>
       <Text style={styles.company}>{BRAND.company}</Text>
-      {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
-      {showDate ? (
-        <Text style={styles.date}>{formatDisplayDate(getTodayKey())}</Text>
+      {subtitle ? (
+        <View style={styles.subtitleRow}>
+          <Text style={styles.subtitle}>{subtitle}</Text>
+          {showDate ? (
+            <Text style={styles.date}>{formatDisplayDate(getTodayKey())}</Text>
+          ) : null}
+        </View>
       ) : null}
     </View>
   );
@@ -49,12 +54,20 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bodyMedium,
     fontSize: 18,
     color: colors.text,
+    flexShrink: 1,
+  },
+  subtitleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
     marginTop: spacing.md,
+    gap: spacing.md,
   },
   date: {
     fontFamily: fonts.body,
     fontSize: 14,
     color: colors.textMuted,
-    marginTop: spacing.xs,
+    textAlign: 'right',
+    flexShrink: 0,
   },
 });

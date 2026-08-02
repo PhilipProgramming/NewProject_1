@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import { EditorialPace } from '@/components/EditorialPace';
-import { LetapeHeader } from '@/components/LetapeHeader';
+import { BrandHeader } from '@/components/BrandHeader';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { ScreenBackground } from '@/components/ScreenBackground';
 import { useAppState } from '@/context/AppContext';
@@ -45,10 +45,9 @@ export default function TodayScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}
       >
-        <LetapeHeader
-          question="How am I doing today?"
-          showDate
-        />
+        <BrandHeader subtitle="Today" showDate />
+
+        <Text style={styles.question}>How am I doing today?</Text>
 
         <View style={styles.heroBlock}>
           <Text style={styles.heroLabel}>Sales</Text>
@@ -88,6 +87,13 @@ const styles = StyleSheet.create({
   centered: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  question: {
+    fontFamily: fonts.displayRegular,
+    fontSize: 22,
+    color: colors.text,
+    lineHeight: 28,
+    marginBottom: spacing.xxl,
   },
   heroBlock: {
     marginBottom: spacing.xxl,
