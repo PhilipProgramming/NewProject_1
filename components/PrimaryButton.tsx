@@ -1,13 +1,6 @@
 import { Pressable, StyleSheet, Text, type ViewStyle } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
 
-import { colors, fonts, radius, spacing } from '@/constants/theme';
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+import { colors, fonts, spacing } from '@/constants/theme';
 
 type PrimaryButtonProps = {
   label: string;
@@ -16,54 +9,48 @@ type PrimaryButtonProps = {
   style?: ViewStyle;
 };
 
-/**
- * Main call-to-action button with subtle press animation.
- * Reanimated shared values drive the scale — a common RN motion pattern.
- */
+/** Quiet editorial action — outline, no fill, restrained. */
 export function PrimaryButton({
   label,
   onPress,
   disabled = false,
   style,
 }: PrimaryButtonProps) {
-  const scale = useSharedValue(1);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
   return (
-    <AnimatedPressable
-      style={[styles.button, disabled && styles.disabled, animatedStyle, style]}
+    <Pressable
+      style={({ pressed }) => [
+        styles.button,
+        pressed && styles.pressed,
+        disabled && styles.disabled,
+        style,
+      ]}
       onPress={onPress}
       disabled={disabled}
-      onPressIn={() => {
-        scale.value = withSpring(0.97, { damping: 15, stiffness: 300 });
-      }}
-      onPressOut={() => {
-        scale.value = withSpring(1, { damping: 15, stiffness: 300 });
-      }}
     >
       <Text style={styles.label}>{label}</Text>
-    </AnimatedPressable>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: colors.primary,
-    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.border,
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
     alignItems: 'center',
+    backgroundColor: colors.background,
+  },
+  pressed: {
+    opacity: 0.7,
   },
   disabled: {
-    opacity: 0.5,
+    opacity: 0.4,
   },
   label: {
-    fontFamily: fonts.bodyBold,
-    fontSize: 16,
+    fontFamily: fonts.bodyMedium,
+    fontSize: 14,
     color: colors.text,
-    letterSpacing: 0.3,
+    letterSpacing: 0.2,
   },
 });

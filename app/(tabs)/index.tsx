@@ -6,43 +6,38 @@ import {
   Text,
   View,
 } from 'react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
 
-import { BrandHeader } from '@/components/BrandHeader';
-import { MetricCard } from '@/components/MetricCard';
+import { EditorialPace } from '@/components/EditorialPace';
+import { LetapeHeader } from '@/components/LetapeHeader';
 import { PrimaryButton } from '@/components/PrimaryButton';
-import { ProgressBar } from '@/components/ProgressBar';
 import { ScreenBackground } from '@/components/ScreenBackground';
 import { useAppState } from '@/context/AppContext';
 import { useTodayMetrics } from '@/hooks/useTodayMetrics';
 import { colors, fonts, spacing } from '@/constants/theme';
-import {
-  formatCurrency,
-  formatCount,
-  formatFar,
-  formatHourlyRate,
-  formatHours,
-} from '@/lib/format';
+import { formatCurrency } from '@/lib/format';
+import { generateDailyObservation } from '@/lib/observations';
 
 /**
- * Dashboard — the associate's home screen for today's performance.
- * Shows derived KPIs; raw numbers are entered on the Log screen.
+ * Today — daily briefing answering: "How am I doing today?"
+ * Editorial layout: hero sales, goal pace, one observation.
  */
-export default function DashboardScreen() {
-  const { isLoading, settings } = useAppState();
+export default function TodayScreen() {
+  const { isLoading } = useAppState();
   const { activity, metrics, hasData } = useTodayMetrics();
 
   if (isLoading) {
     return (
       <ScreenBackground withTabBar style={styles.centered}>
-        <ActivityIndicator color={colors.accent} size="large" />
+        <ActivityIndicator color={colors.textMuted} size="large" />
       </ScreenBackground>
     );
   }
 
-  const greeting = settings.associateName
-    ? `Welcome back, ${settings.associateName}`
-    : "Today's performance";
+  const observation = generateDailyObservation(
+    activity,
+    metrics,
+    hasData,
+  );
 
   return (
     <ScreenBackground withTabBar>
@@ -50,101 +45,34 @@ export default function DashboardScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}
       >
-        <BrandHeader subtitle={greeting} showDate />
+        <LetapeHeader
+          question="How am I doing today?"
+          showDate
+        />
 
-        <Animated.View
-          entering={FadeInDown.duration(500)}
-          style={styles.progressWrapper}
-        >
-          <ProgressBar progress={metrics.goalProgress} />
-        </Animated.View>
+        <View style={styles.heroBlock}>
+          <Text style={styles.heroLabel}>Sales</Text>
+          <Text style={styles.heroValue}>
+            {hasData ? formatCurrency(activity.totalSales) : '—'}
+          </Text>
+        </View>
 
-        {!hasData ? (
-          <Animated.View entering={FadeInDown.delay(100).duration(500)}>
-            <View style={styles.emptyBanner}>
-              <Text style={styles.emptyTitle}>No activity logged yet</Text>
-              <Text style={styles.emptyMessage}>
-                Enter today&apos;s numbers to see your KPIs update in real time.
-              </Text>
-            </View>
-          </Animated.View>
-        ) : null}
-
-        <Animated.View
-          entering={FadeInDown.delay(200).duration(500)}
-          style={styles.metricsSection}
-        >
-          <Text style={styles.sectionTitle}>Key metrics</Text>
-          <View style={styles.metricsGrid}>
-            <MetricCard
-              label="Total sales"
-              value={formatCurrency(activity.totalSales)}
-            />
-            <MetricCard
-              label="Transactions"
-              value={formatCount(activity.transactions)}
-            />
-            <MetricCard
-              label="Avg transaction"
-              value={formatCurrency(metrics.averageTransactionValue)}
-            />
-            <MetricCard
-              label="Commission"
-              value={formatCurrency(metrics.commissionEarned)}
-            />
-            <MetricCard
-              label="Shoes sold"
-              value={formatCount(activity.shoesSold)}
-            />
-            <MetricCard
-              label="Accessories"
-              value={formatCount(activity.accessoriesSold)}
-            />
-            <MetricCard
-              label="Attachment rate"
-              value={formatFar(metrics.far)}
-            />
-            <MetricCard
-              label="Goal"
-              value={formatCurrency(settings.dailySalesGoal)}
-            />
+        {hasData ? (
+          <EditorialPace progress={metrics.goalProgress} />
+        ) : (
+          <View style={styles.pacePlaceholder}>
+            <Text style={styles.heroLabel}>Goal pace</Text>
+            <Text style={styles.paceEmpty}>—</Text>
           </View>
-        </Animated.View>
+        )}
 
-        <Animated.View
-          entering={FadeInDown.delay(300).duration(500)}
-          style={styles.metricsSection}
-        >
-          <Text style={styles.sectionTitle}>Earnings</Text>
-          <View style={styles.metricsGrid}>
-            <MetricCard
-              label="Hours worked"
-              value={formatHours(activity.hoursWorked)}
-            />
-            <MetricCard
-              label="Base rate"
-              value={formatCurrency(metrics.baseHourlyRate) + '/hr'}
-            />
-            <MetricCard
-              label="Base pay"
-              value={formatCurrency(metrics.basePay)}
-            />
-            <MetricCard
-              label="Total earnings"
-              value={formatCurrency(metrics.totalEarnings)}
-            />
-            <MetricCard
-              label="Effective rate"
-              value={formatHourlyRate(
-                metrics.effectiveHourlyRate,
-                activity.hoursWorked,
-              )}
-            />
-          </View>
-        </Animated.View>
+        <View style={styles.observationBlock}>
+          <Text style={styles.observationLabel}>Observation</Text>
+          <Text style={styles.observationText}>{observation}</Text>
+        </View>
 
         <PrimaryButton
-          label={hasData ? "Update today's numbers" : "Log today's numbers"}
+          label={hasData ? 'Update today\'s figures' : 'Record today\'s figures'}
           onPress={() => router.push('/log')}
           style={styles.cta}
         />
@@ -155,53 +83,56 @@ export default function DashboardScreen() {
 
 const styles = StyleSheet.create({
   scroll: {
-    paddingBottom: spacing.xl,
-    overflow: 'visible',
-  },
-  progressWrapper: {
-    overflow: 'visible',
+    paddingBottom: spacing.xxxl,
   },
   centered: {
     justifyContent: 'center',
     alignItems: 'center',
   },
-  emptyBanner: {
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.surfaceBorder,
-    borderRadius: 12,
-    padding: spacing.md,
-    marginBottom: spacing.lg,
+  heroBlock: {
+    marginBottom: spacing.xxl,
   },
-  emptyTitle: {
-    fontFamily: fonts.bodyBold,
-    fontSize: 16,
-    color: colors.text,
-    marginBottom: spacing.xs,
-  },
-  emptyMessage: {
+  heroLabel: {
     fontFamily: fonts.body,
-    fontSize: 14,
+    fontSize: 13,
     color: colors.textMuted,
-    lineHeight: 20,
+    marginBottom: spacing.sm,
   },
-  metricsSection: {
-    marginBottom: spacing.lg,
+  heroValue: {
+    fontFamily: fonts.display,
+    fontSize: 56,
+    color: colors.text,
+    lineHeight: 60,
+    letterSpacing: -1,
   },
-  sectionTitle: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 14,
+  pacePlaceholder: {
+    marginBottom: spacing.xxl,
+  },
+  paceEmpty: {
+    fontFamily: fonts.display,
+    fontSize: 36,
     color: colors.textMuted,
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-    marginBottom: spacing.md,
+    lineHeight: 40,
   },
-  metricsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
+  observationBlock: {
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    paddingTop: spacing.lg,
+    marginBottom: spacing.xxl,
+  },
+  observationLabel: {
+    fontFamily: fonts.body,
+    fontSize: 13,
+    color: colors.textMuted,
+    marginBottom: spacing.sm,
+  },
+  observationText: {
+    fontFamily: fonts.displayRegular,
+    fontSize: 20,
+    color: colors.text,
+    lineHeight: 28,
   },
   cta: {
-    marginTop: spacing.sm,
+    alignSelf: 'flex-start',
   },
 });

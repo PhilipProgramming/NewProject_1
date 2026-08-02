@@ -1,12 +1,13 @@
 import {
-  Fraunces_400Regular,
-  Fraunces_700Bold,
-} from '@expo-google-fonts/fraunces';
+  EBGaramond_400Regular,
+  EBGaramond_400Regular_Italic,
+  EBGaramond_500Medium,
+} from '@expo-google-fonts/eb-garamond';
 import {
-  DMSans_400Regular,
-  DMSans_500Medium,
-  DMSans_700Bold,
-} from '@expo-google-fonts/dm-sans';
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+} from '@expo-google-fonts/inter';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -19,20 +20,16 @@ import { colors } from '@/constants/theme';
 
 export { ErrorBoundary } from 'expo-router';
 
-// Keep splash visible until custom fonts load.
 SplashScreen.preventAutoHideAsync();
 
-/**
- * Root layout — wraps the entire app in AppProvider and loads fonts.
- * Expo Router treats this file as the top of the navigation tree.
- */
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    Fraunces_400Regular,
-    Fraunces_700Bold,
-    DMSans_400Regular,
-    DMSans_500Medium,
-    DMSans_700Bold,
+    EBGaramond_400Regular,
+    EBGaramond_400Regular_Italic,
+    EBGaramond_500Medium,
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
   });
 
   useEffect(() => {
@@ -50,7 +47,7 @@ export default function RootLayout() {
   if (!loaded) {
     return (
       <View style={styles.loading}>
-        <ActivityIndicator color={colors.accent} size="large" />
+        <ActivityIndicator color={colors.textMuted} size="large" />
       </View>
     );
   }
@@ -59,30 +56,31 @@ export default function RootLayout() {
     <AppProvider>
       <Stack
         screenOptions={{
-          headerStyle: { backgroundColor: colors.backgroundTop },
+          headerStyle: { backgroundColor: colors.background },
           headerTintColor: colors.text,
-          headerTitleStyle: { fontFamily: 'DMSans_500Medium' },
-          contentStyle: { backgroundColor: colors.backgroundBottom },
+          headerTitleStyle: { fontFamily: 'Inter_500Medium' },
+          contentStyle: { backgroundColor: colors.background },
+          headerShadowVisible: false,
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="log"
           options={{
-            title: "Log Today's Activity",
+            title: 'Record performance',
             presentation: 'modal',
           }}
         />
         <Stack.Screen
           name="day/[date]"
           options={{
-            title: 'Day Detail',
+            title: 'Day detail',
           }}
         />
         <Stack.Screen
           name="dictionary"
           options={{
-            title: 'Data Dictionary',
+            title: 'Data dictionary',
           }}
         />
       </Stack>
@@ -93,7 +91,7 @@ export default function RootLayout() {
 const styles = StyleSheet.create({
   loading: {
     flex: 1,
-    backgroundColor: colors.backgroundBottom,
+    backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
   },

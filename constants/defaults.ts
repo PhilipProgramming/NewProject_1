@@ -29,9 +29,12 @@ export const ROLE_LABELS: Record<AssociateRole, string> = {
   team_lead: 'Team Lead ($4/hr)',
 };
 
-/** Brand copy for About sections. */
+/** L'Étape brand hierarchy — consulting practice, not SaaS product. */
 export const BRAND = {
-  appName: 'Pomegranate',
-  company: 'Tantalus Incorporated',
+  parent: 'Maison de Données',
+  appName: "L'Étape",
+  descriptor: 'Performance Intelligence',
   tagline: "for data that's out of reach",
+  /** @deprecated Use `parent` — kept until Settings is redesigned. */
+  company: 'Maison de Données',
 } as const;

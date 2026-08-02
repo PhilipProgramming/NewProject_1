@@ -1,4 +1,3 @@
-import { LinearGradient } from 'expo-linear-gradient';
 import { type ReactNode } from 'react';
 import { StyleSheet, View, type ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -7,15 +6,11 @@ import { colors } from '@/constants/theme';
 
 type ScreenBackgroundProps = {
   children: ReactNode;
-  /** Extra padding at the bottom for tab bars. */
   withTabBar?: boolean;
   style?: ViewStyle;
 };
 
-/**
- * Full-screen atmospheric background shared by every screen.
- * LinearGradient gives depth without relying on a flat single color.
- */
+/** Warm off-white canvas — no gradients, editorial calm. */
 export function ScreenBackground({
   children,
   withTabBar = false,
@@ -24,32 +19,30 @@ export function ScreenBackground({
   const insets = useSafeAreaInsets();
 
   return (
-    <LinearGradient
-      colors={[colors.backgroundTop, colors.backgroundBottom]}
-      style={styles.gradient}
-    >
+    <View style={styles.root}>
       <View
         style={[
           styles.content,
           {
-            paddingTop: insets.top + 8,
-            paddingBottom: withTabBar ? 8 : insets.bottom + 16,
+            paddingTop: insets.top + 12,
+            paddingBottom: withTabBar ? 8 : insets.bottom + 24,
           },
           style,
         ]}
       >
         {children}
       </View>
-    </LinearGradient>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  gradient: {
+  root: {
     flex: 1,
+    backgroundColor: colors.background,
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 28,
   },
 });

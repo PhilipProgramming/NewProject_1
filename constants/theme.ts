@@ -1,26 +1,34 @@
 /**
- * Visual design tokens for Pomegranate.
- * Centralizing colors/spacing keeps the UI consistent and easy to tweak.
+ * L'Étape editorial design tokens.
+ * Warm paper backgrounds, soft charcoal type, typography-led layout.
  */
 
 export const colors = {
-  /** Deep pomegranate wine — primary brand accent. */
-  primary: '#8B1538',
-  primaryDark: '#5C0E25',
-  /** Warm gold highlight for commission / success moments. */
-  accent: '#C4A35A',
-  /** Cool slate background tones (not flat white). */
-  backgroundTop: '#1A2332',
-  backgroundBottom: '#0F1419',
-  surface: 'rgba(255, 255, 255, 0.06)',
-  surfaceBorder: 'rgba(255, 255, 255, 0.12)',
-  text: '#F5F0EB',
-  textMuted: 'rgba(245, 240, 235, 0.65)',
-  textInverse: '#1A2332',
-  success: '#4ADE80',
-  error: '#F87171',
-  progressTrack: 'rgba(255, 255, 255, 0.15)',
-  progressFill: '#8B1538',
+  /** Warm off-white page background. */
+  background: '#F5F2EC',
+  /** Slightly warmer variant for subtle contrast. */
+  backgroundAlt: '#F7F4EF',
+  /** Nearly black — primary text. */
+  text: '#2C2C2C',
+  /** Soft charcoal for secondary copy. */
+  textMuted: '#6B6560',
+  /** Hairline rules and quiet borders. */
+  border: '#E8E4DC',
+  /** Minimal accent — used sparingly. */
+  accent: '#4A4540',
+  /** Progress and positive signals. */
+  signal: '#3D3D3D',
+  error: '#8B4B4B',
+  progressTrack: '#E8E4DC',
+  progressFill: '#2C2C2C',
+  /** Tab bar and surfaces on light ground. */
+  surface: '#F5F2EC',
+  /** @deprecated Use `border` — kept until History/Settings/Log are redesigned. */
+  surfaceBorder: '#E8E4DC',
+  /** @deprecated Use `accent` — kept until form components are redesigned. */
+  primary: '#4A4540',
+  /** @deprecated Use `background` — kept until +not-found is redesigned. */
+  backgroundBottom: '#F5F2EC',
 } as const;
 
 export const spacing = {
@@ -30,20 +38,25 @@ export const spacing = {
   lg: 24,
   xl: 32,
   xxl: 48,
+  xxxl: 64,
 } as const;
 
 export const radius = {
-  sm: 8,
-  md: 12,
-  lg: 16,
+  sm: 4,
+  md: 8,
 } as const;
 
 export const fonts = {
-  /** Display font for the Pomegranate brand name. */
-  brand: 'Fraunces_700Bold',
-  brandRegular: 'Fraunces_400Regular',
-  /** Body / UI font. */
-  body: 'DMSans_400Regular',
-  bodyMedium: 'DMSans_500Medium',
-  bodyBold: 'DMSans_700Bold',
+  /** Garamond-inspired serif for headlines. */
+  display: 'EBGaramond_500Medium',
+  displayRegular: 'EBGaramond_400Regular',
+  displayItalic: 'EBGaramond_400Regular_Italic',
+  /** Clean sans for interface and labels. */
+  body: 'Inter_400Regular',
+  bodyMedium: 'Inter_500Medium',
+  bodyBold: 'Inter_600SemiBold',
+  /** @deprecated Use `display` — kept until remaining screens are redesigned. */
+  brand: 'EBGaramond_500Medium',
+  /** @deprecated Use `displayRegular`. */
+  brandRegular: 'EBGaramond_400Regular',
 } as const;

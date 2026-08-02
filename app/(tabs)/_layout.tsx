@@ -3,23 +3,19 @@ import { Tabs } from 'expo-router';
 
 import { colors, fonts } from '@/constants/theme';
 
-/**
- * Bottom tab navigator — Dashboard, History, Settings.
- * Tabs are ideal for the three main destinations the associate revisits often.
- */
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: colors.backgroundTop,
-          borderTopColor: colors.surfaceBorder,
+          backgroundColor: colors.background,
+          borderTopColor: colors.border,
           height: 64,
           paddingBottom: 8,
           paddingTop: 8,
         },
-        tabBarActiveTintColor: colors.accent,
+        tabBarActiveTintColor: colors.text,
         tabBarInactiveTintColor: colors.textMuted,
         tabBarLabelStyle: {
           fontFamily: fonts.bodyMedium,
@@ -30,9 +26,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Dashboard',
+          title: 'Today',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="speedometer-outline" size={size} color={color} />
+            <Ionicons name="document-text-outline" size={size} color={color} />
           ),
         }}
       />
@@ -41,7 +37,7 @@ export default function TabLayout() {
         options={{
           title: 'History',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar-outline" size={size} color={color} />
+            <Ionicons name="time-outline" size={size} color={color} />
           ),
         }}
       />
@@ -50,7 +46,7 @@ export default function TabLayout() {
         options={{
           title: 'Settings',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="settings-outline" size={size} color={color} />
+            <Ionicons name="options-outline" size={size} color={color} />
           ),
         }}
       />
