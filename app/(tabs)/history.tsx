@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native';
 
-import { BrandHeader } from '@/components/BrandHeader';
 import { EmptyState } from '@/components/EmptyState';
 import { ScreenBackground } from '@/components/ScreenBackground';
 import { useAppState } from '@/context/AppContext';
@@ -18,7 +17,7 @@ import { formatCurrency, formatPercent } from '@/lib/format';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
 
 /**
- * History tab — read-only list of past days with sales and goal progress.
+ * History — read-only list of past days with sales and goal progress.
  */
 export default function HistoryScreen() {
   const { isLoading, days, settings } = useAppState();
@@ -28,19 +27,19 @@ export default function HistoryScreen() {
 
   if (isLoading) {
     return (
-      <ScreenBackground withTabBar style={styles.centered}>
+      <ScreenBackground style={styles.centered}>
         <ActivityIndicator color={colors.accent} size="large" />
       </ScreenBackground>
     );
   }
 
   return (
-    <ScreenBackground withTabBar>
+    <ScreenBackground>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}
       >
-        <BrandHeader subtitle="History" />
+        <Text style={styles.title}>History</Text>
 
         {dateKeys.length === 0 ? (
           <EmptyState
@@ -102,19 +101,26 @@ export default function HistoryScreen() {
 
 const styles = StyleSheet.create({
   scroll: {
-    paddingBottom: spacing.xl,
+    paddingBottom: spacing.xxxl,
   },
   centered: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  title: {
+    fontFamily: fonts.displayRegular,
+    fontSize: 28,
+    color: colors.text,
+    marginBottom: spacing.xxl,
+    letterSpacing: -0.3,
   },
   row: {
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.surfaceBorder,
     borderRadius: radius.md,
-    padding: spacing.md,
-    marginBottom: spacing.sm,
+    padding: spacing.lg,
+    marginBottom: spacing.md,
   },
   rowActive: {
     backgroundColor: colors.brandBlue,

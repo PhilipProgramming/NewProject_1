@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import { EditorialPace } from '@/components/EditorialPace';
-import { BrandHeader } from '@/components/BrandHeader';
+import { PageDate } from '@/components/PageDate';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { ScreenBackground } from '@/components/ScreenBackground';
 import { useAppState } from '@/context/AppContext';
@@ -19,7 +19,6 @@ import { generateDailyObservation } from '@/lib/observations';
 
 /**
  * Today — daily briefing with sales, goal pace, and maison notes.
- * Editorial layout: hero sales, goal pace, one insight.
  */
 export default function TodayScreen() {
   const { isLoading } = useAppState();
@@ -27,7 +26,7 @@ export default function TodayScreen() {
 
   if (isLoading) {
     return (
-      <ScreenBackground withTabBar style={styles.centered}>
+      <ScreenBackground style={styles.centered}>
         <ActivityIndicator color={colors.textMuted} size="large" />
       </ScreenBackground>
     );
@@ -40,12 +39,12 @@ export default function TodayScreen() {
   );
 
   return (
-    <ScreenBackground withTabBar>
+    <ScreenBackground>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}
       >
-        <BrandHeader subtitle="Today" showDate />
+        <PageDate title="Today" />
 
         <View style={styles.heroBlock}>
           <Text style={styles.heroLabel}>Sales</Text>
@@ -87,13 +86,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   heroBlock: {
-    marginBottom: spacing.xxl,
+    marginBottom: spacing.xxxl,
   },
   heroLabel: {
     fontFamily: fonts.body,
     fontSize: 16,
     color: colors.textMuted,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.md,
   },
   heroValue: {
     fontFamily: fonts.display,
@@ -103,7 +102,7 @@ const styles = StyleSheet.create({
     letterSpacing: -1,
   },
   pacePlaceholder: {
-    marginBottom: spacing.xxl,
+    marginBottom: spacing.xxxl,
   },
   paceEmpty: {
     fontFamily: fonts.display,
@@ -114,20 +113,20 @@ const styles = StyleSheet.create({
   observationBlock: {
     borderTopWidth: 1,
     borderTopColor: colors.border,
-    paddingTop: spacing.lg,
-    marginBottom: spacing.xxl,
+    paddingTop: spacing.xl,
+    marginBottom: spacing.xxxl,
   },
   observationLabel: {
     fontFamily: fonts.body,
     fontSize: 16,
     color: colors.textMuted,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.md,
   },
   observationText: {
     fontFamily: fonts.displayRegular,
     fontSize: 20,
     color: colors.text,
-    lineHeight: 28,
+    lineHeight: 30,
   },
   cta: {
     alignSelf: 'flex-start',

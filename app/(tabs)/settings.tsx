@@ -11,24 +11,19 @@ import {
   View,
 } from 'react-native';
 
-import { BrandHeader } from '@/components/BrandHeader';
 import { RolePicker } from '@/components/RolePicker';
 import { NumberField } from '@/components/NumberField';
 import { TextField } from '@/components/TextField';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { TextLinkButton } from '@/components/TextLinkButton';
 import { ScreenBackground } from '@/components/ScreenBackground';
+import { SettingsFooter } from '@/components/SettingsFooter';
 import { useAppState } from '@/context/AppContext';
 import { colors, fonts, spacing } from '@/constants/theme';
 import type { AssociateRole } from '@/types/models';
-import {
-  validateActivityForm,
-  type FieldErrors,
-} from '@/lib/validation';
 
 /**
  * Settings — configure daily goal, commission rate, role, and associate name.
- * Changes persist to AsyncStorage via AppContext.updateSettings.
  */
 export default function SettingsScreen() {
   const { isLoading, isSaving, settings, updateSettings, error } =
@@ -38,12 +33,10 @@ export default function SettingsScreen() {
   const [dailySalesGoal, setDailySalesGoal] = useState('');
   const [commissionRate, setCommissionRate] = useState('');
   const [role, setRole] = useState<AssociateRole>('associate');
-  const [errors, setErrors] = useState<
-    FieldErrors & {
-      dailySalesGoal?: string;
-      commissionRate?: string;
-    }
-  >({});
+  const [errors, setErrors] = useState<{
+    dailySalesGoal?: string;
+    commissionRate?: string;
+  }>({});
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
@@ -89,14 +82,14 @@ export default function SettingsScreen() {
 
   if (isLoading) {
     return (
-      <ScreenBackground withTabBar style={styles.centered}>
+      <ScreenBackground style={styles.centered}>
         <ActivityIndicator color={colors.accent} size="large" />
       </ScreenBackground>
     );
   }
 
   return (
-    <ScreenBackground withTabBar>
+    <ScreenBackground>
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -106,65 +99,61 @@ export default function SettingsScreen() {
           contentContainerStyle={styles.scroll}
           keyboardShouldPersistTaps="handled"
         >
-          <BrandHeader subtitle="Settings" />
+          <Text style={styles.title}>Settings</Text>
 
-          <TextField
-            label="Your name (optional)"
-            value={associateName}
-            onChangeText={setAssociateName}
-            placeholder="Alex"
-          />
-          <Text style={styles.nameHint}>
-            Shown as a greeting on the Dashboard.
-          </Text>
-
-          <RolePicker
-            label="Your role"
-            value={role}
-            onChange={setRole}
-          />
-          <Text style={styles.nameHint}>
-            Sets base hourly pay: $2 for associates, $4 for team leads.
-          </Text>
-
-          <NumberField
-            label="Daily sales goal ($)"
-            value={dailySalesGoal}
-            onChangeText={setDailySalesGoal}
-            prefix="$"
-            keyboardType="decimal-pad"
-            error={errors.dailySalesGoal}
-          />
-          <NumberField
-            label="Commission rate (%)"
-            value={commissionRate}
-            onChangeText={setCommissionRate}
-            keyboardType="decimal-pad"
-            error={errors.commissionRate}
-          />
-
-          <PrimaryButton
-            label={isSaving ? 'Saving…' : 'Save settings'}
-            onPress={handleSave}
-            disabled={isSaving}
-            style={styles.saveButton}
-          />
-
-          {error ? <Text style={styles.error}>{error}</Text> : null}
-
-          <TextLinkButton
-            label="How metrics are calculated →"
-            onPress={() => router.push('/dictionary')}
-            style={styles.dictionaryLink}
-          />
-
-          <View style={styles.about}>
-            <Text style={styles.aboutTitle}>
-              L&apos;Étape by Maison de Données
+          <View style={styles.form}>
+            <TextField
+              label="Your name (optional)"
+              value={associateName}
+              onChangeText={setAssociateName}
+              placeholder="Alex"
+            />
+            <Text style={styles.nameHint}>
+              Shown as a greeting on the Dashboard.
             </Text>
-            <Text style={styles.aboutTagline}>Analytics in steps</Text>
-            <Text style={styles.aboutText}>Version 0.3 // MdD 2026</Text>
+
+            <RolePicker
+              label="Your role"
+              value={role}
+              onChange={setRole}
+            />
+            <Text style={styles.nameHint}>
+              Sets base hourly pay: $2 for associates, $4 for team leads.
+            </Text>
+
+            <NumberField
+              label="Daily sales goal ($)"
+              value={dailySalesGoal}
+              onChangeText={setDailySalesGoal}
+              prefix="$"
+              keyboardType="decimal-pad"
+              error={errors.dailySalesGoal}
+            />
+            <NumberField
+              label="Commission rate (%)"
+              value={commissionRate}
+              onChangeText={setCommissionRate}
+              keyboardType="decimal-pad"
+              error={errors.commissionRate}
+            />
+
+            <PrimaryButton
+              label={isSaving ? 'Saving…' : 'Save settings'}
+              onPress={handleSave}
+              disabled={isSaving}
+              style={styles.saveButton}
+            />
+
+            {error ? <Text style={styles.error}>{error}</Text> : null}
+
+            <TextLinkButton
+              label="How metrics are calculated →"
+              onPress={() => router.push('/dictionary')}
+              style={styles.dictionaryLink}
+            />
           </View>
+
+          <SettingsFooter />
         </ScrollView>
       </KeyboardAvoidingView>
     </ScreenBackground>
@@ -176,24 +165,35 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scroll: {
-    paddingBottom: spacing.xxl,
+    flexGrow: 1,
+    paddingBottom: spacing.xl,
   },
   centered: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  title: {
+    fontFamily: fonts.displayRegular,
+    fontSize: 28,
+    color: colors.text,
+    marginBottom: spacing.xxl,
+    letterSpacing: -0.3,
+  },
+  form: {
+    flex: 1,
   },
   nameHint: {
     fontFamily: fonts.body,
     fontSize: 12,
     color: colors.textMuted,
     marginTop: -spacing.sm,
-    marginBottom: spacing.md,
+    marginBottom: spacing.lg,
   },
   saveButton: {
-    marginTop: spacing.md,
+    marginTop: spacing.lg,
   },
   dictionaryLink: {
-    marginTop: spacing.lg,
+    marginTop: spacing.xl,
   },
   error: {
     fontFamily: fonts.body,
@@ -201,32 +201,5 @@ const styles = StyleSheet.create({
     color: colors.error,
     marginTop: spacing.md,
     textAlign: 'center',
-  },
-  about: {
-    marginTop: spacing.xxl,
-    paddingTop: spacing.lg,
-    borderTopWidth: 1,
-    borderTopColor: colors.surfaceBorder,
-  },
-  aboutTitle: {
-    fontFamily: fonts.bodyBold,
-    fontSize: 16,
-    color: colors.text,
-    marginBottom: spacing.sm,
-  },
-  aboutText: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    color: colors.textMuted,
-    lineHeight: 20,
-    marginBottom: spacing.xs,
-  },
-  aboutTagline: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    color: colors.textMuted,
-    lineHeight: 20,
-    marginBottom: spacing.xs,
-    fontStyle: 'italic',
   },
 });

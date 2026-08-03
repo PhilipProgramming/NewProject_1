@@ -1,55 +1,32 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Tabs } from 'expo-router';
+import { Stack } from 'expo-router';
+import { StyleSheet, View } from 'react-native';
 
-import { colors, fonts } from '@/constants/theme';
+import { EditorialNav } from '@/components/EditorialNav';
+import { colors } from '@/constants/theme';
 
-export default function TabLayout() {
+export default function MainLayout() {
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: colors.background,
-          borderTopColor: colors.border,
-          height: 64,
-          paddingBottom: 8,
-          paddingTop: 8,
-        },
-        tabBarActiveTintColor: colors.text,
-        tabBarInactiveTintColor: colors.textMuted,
-        tabBarLabelStyle: {
-          fontFamily: fonts.bodyMedium,
-          fontSize: 11,
-        },
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Today',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="document-text-outline" size={size} color={color} />
-          ),
+    <View style={styles.root}>
+      <EditorialNav />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.background },
+          animation: 'fade',
         }}
-      />
-      <Tabs.Screen
-        name="history"
-        options={{
-          title: 'History',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="time-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="settings"
-        options={{
-          title: 'Settings',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="options-outline" size={size} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
+      >
+        <Stack.Screen name="index" />
+        <Stack.Screen name="history" />
+        <Stack.Screen name="floor" />
+        <Stack.Screen name="settings" />
+      </Stack>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+});

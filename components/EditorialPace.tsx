@@ -27,7 +27,7 @@ export function EditorialPace({ progress }: EditorialPaceProps) {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: spacing.xxl,
+    marginBottom: spacing.xxxl,
   },
   label: {
     fontFamily: fonts.body,
