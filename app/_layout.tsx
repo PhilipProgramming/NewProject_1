@@ -16,6 +16,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import 'react-native-reanimated';
 
 import { AppProvider } from '@/context/AppContext';
+import { FloorProvider } from '@/context/FloorContext';
 import { colors } from '@/constants/theme';
 
 export { ErrorBoundary } from 'expo-router';
@@ -54,7 +55,8 @@ export default function RootLayout() {
 
   return (
     <AppProvider>
-      <Stack
+      <FloorProvider>
+        <Stack
         screenOptions={{
           headerStyle: { backgroundColor: colors.background },
           headerTintColor: colors.text,
@@ -85,6 +87,7 @@ export default function RootLayout() {
           }}
         />
       </Stack>
+      </FloorProvider>
     </AppProvider>
   );
 }
