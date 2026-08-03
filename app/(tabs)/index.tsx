@@ -1,17 +1,11 @@
 import { router } from 'expo-router';
-import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-import { EditorialPace } from '@/components/EditorialPace';
 import { AnimatedSalesValue } from '@/components/AnimatedSalesValue';
-import { PageDate } from '@/components/PageDate';
+import { EditorialPage } from '@/components/EditorialPage';
+import { EditorialPace } from '@/components/EditorialPace';
 import { PrimaryButton } from '@/components/PrimaryButton';
-import { ScreenBackground } from '@/components/ScreenBackground';
+import { TodayPageDate } from '@/components/TodayPageDate';
 import { useAppState } from '@/context/AppContext';
 import { useTodayMetrics } from '@/hooks/useTodayMetrics';
 import { colors, fonts, spacing } from '@/constants/theme';
@@ -24,14 +18,6 @@ export default function TodayScreen() {
   const { isLoading } = useAppState();
   const { activity, metrics, hasData } = useTodayMetrics();
 
-  if (isLoading) {
-    return (
-      <ScreenBackground style={styles.centered}>
-        <ActivityIndicator color={colors.textMuted} size="large" />
-      </ScreenBackground>
-    );
-  }
-
   const observation = generateDailyObservation(
     activity,
     metrics,
@@ -39,54 +25,44 @@ export default function TodayScreen() {
   );
 
   return (
-    <ScreenBackground>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scroll}
-      >
-        <PageDate title="Today" />
-
-        <View style={styles.heroBlock}>
-          <Text style={styles.heroLabel}>Sales</Text>
-          <AnimatedSalesValue
-            value={activity.totalSales}
-            active={hasData}
-            style={styles.heroValue}
-          />
-        </View>
-
-        {hasData ? (
-          <EditorialPace progress={metrics.goalProgress} />
-        ) : (
-          <View style={styles.pacePlaceholder}>
-            <Text style={styles.heroLabel}>Goal pace</Text>
-            <Text style={styles.paceEmpty}>—</Text>
-          </View>
-        )}
-
-        <View style={styles.observationBlock}>
-          <Text style={styles.observationLabel}>Notes from the Maison</Text>
-          <Text style={styles.observationText}>{observation}</Text>
-        </View>
-
-        <PrimaryButton
-          label={hasData ? 'Update today\'s figures' : 'Record today\'s figures'}
-          onPress={() => router.push('/log')}
-          style={styles.cta}
+    <EditorialPage
+      title="Today"
+      headerTrailing={<TodayPageDate />}
+      loading={isLoading}
+    >
+      <View style={styles.heroBlock}>
+        <Text style={styles.heroLabel}>Sales</Text>
+        <AnimatedSalesValue
+          value={activity.totalSales}
+          active={hasData}
+          style={styles.heroValue}
         />
-      </ScrollView>
-    </ScreenBackground>
+      </View>
+
+      {hasData ? (
+        <EditorialPace progress={metrics.goalProgress} />
+      ) : (
+        <View style={styles.pacePlaceholder}>
+          <Text style={styles.heroLabel}>Goal pace</Text>
+          <Text style={styles.paceEmpty}>—</Text>
+        </View>
+      )}
+
+      <View style={styles.observationBlock}>
+        <Text style={styles.observationLabel}>Notes from the Maison</Text>
+        <Text style={styles.observationText}>{observation}</Text>
+      </View>
+
+      <PrimaryButton
+        label={hasData ? 'Update today\'s figures' : 'Record today\'s figures'}
+        onPress={() => router.push('/log')}
+        style={styles.cta}
+      />
+    </EditorialPage>
   );
 }
 
 const styles = StyleSheet.create({
-  scroll: {
-    paddingBottom: spacing.xxxl,
-  },
-  centered: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   heroBlock: {
     marginBottom: spacing.xxxl,
   },

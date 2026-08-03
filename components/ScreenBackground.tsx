@@ -3,6 +3,10 @@ import { StyleSheet, View, type ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors, spacing } from '@/constants/theme';
+import {
+  PAGE_HORIZONTAL_PADDING,
+  PAGE_MAX_WIDTH,
+} from '@/constants/pageLayout';
 
 type ScreenBackgroundProps = {
   children: ReactNode;
@@ -37,9 +41,9 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: 40,
+    paddingHorizontal: PAGE_HORIZONTAL_PADDING,
     paddingTop: spacing.xl,
-    maxWidth: 720,
+    maxWidth: PAGE_MAX_WIDTH,
     width: '100%',
     alignSelf: 'center',
   },

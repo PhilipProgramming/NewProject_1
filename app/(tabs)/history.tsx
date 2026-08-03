@@ -1,15 +1,8 @@
 import { router } from 'expo-router';
-import {
-  ActivityIndicator,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { EditorialPage } from '@/components/EditorialPage';
 import { EmptyState } from '@/components/EmptyState';
-import { ScreenBackground } from '@/components/ScreenBackground';
 import { useAppState } from '@/context/AppContext';
 import { calculateMetrics } from '@/lib/calculations';
 import { sortDateKeysDesc, formatShortDate, getTodayKey } from '@/lib/dates';
@@ -25,95 +18,66 @@ export default function HistoryScreen() {
   const dateKeys = sortDateKeysDesc(Object.keys(days));
   const todayKey = getTodayKey();
 
-  if (isLoading) {
-    return (
-      <ScreenBackground style={styles.centered}>
-        <ActivityIndicator color={colors.accent} size="large" />
-      </ScreenBackground>
-    );
-  }
-
   return (
-    <ScreenBackground>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scroll}
-      >
-        <Text style={styles.title}>History</Text>
+    <EditorialPage title="History" loading={isLoading}>
+      {dateKeys.length === 0 ? (
+        <EmptyState
+          title="No history yet"
+          message="Days you log will appear here so you can review recent performance."
+        />
+      ) : (
+        dateKeys.map((dateKey) => {
+          const day = days[dateKey];
+          const metrics = calculateMetrics(day, settings);
+          const isToday = dateKey === todayKey;
 
-        {dateKeys.length === 0 ? (
-          <EmptyState
-            title="No history yet"
-            message="Days you log will appear here so you can review recent performance."
-          />
-        ) : (
-          dateKeys.map((dateKey) => {
-            const day = days[dateKey];
-            const metrics = calculateMetrics(day, settings);
-            const isToday = dateKey === todayKey;
-
-            return (
-              <Pressable
-                key={dateKey}
-                style={({ pressed, hovered }) => [
-                  styles.row,
-                  (hovered || pressed) && styles.rowActive,
-                ]}
-                onPress={() => router.push(`/day/${dateKey}`)}
-              >
-                {({ pressed, hovered }) => {
-                  const active = hovered || pressed;
-                  return (
-                    <>
-                      <View style={styles.rowMain}>
-                        <Text
-                          style={[styles.rowDate, active && styles.rowTextActive]}
-                        >
-                          {formatShortDate(dateKey)}
-                          {isToday ? ' · Today' : ''}
-                        </Text>
-                        <Text
-                          style={[styles.rowSales, active && styles.rowTextActive]}
-                        >
-                          {formatCurrency(day.totalSales)}
-                        </Text>
-                      </View>
+          return (
+            <Pressable
+              key={dateKey}
+              style={({ pressed, hovered }) => [
+                styles.row,
+                (hovered || pressed) && styles.rowActive,
+              ]}
+              onPress={() => router.push(`/day/${dateKey}`)}
+            >
+              {({ pressed, hovered }) => {
+                const active = hovered || pressed;
+                return (
+                  <>
+                    <View style={styles.rowMain}>
                       <Text
-                        style={[
-                          styles.rowProgress,
-                          active && styles.rowProgressActive,
-                        ]}
+                        style={[styles.rowDate, active && styles.rowTextActive]}
                       >
-                        {formatPercent(Math.min(metrics.goalProgress, 1))}
-                        {metrics.goalProgress > 1 ? '+' : ''} of goal
+                        {formatShortDate(dateKey)}
+                        {isToday ? ' · Today' : ''}
                       </Text>
-                    </>
-                  );
-                }}
-              </Pressable>
-            );
-          })
-        )}
-      </ScrollView>
-    </ScreenBackground>
+                      <Text
+                        style={[styles.rowSales, active && styles.rowTextActive]}
+                      >
+                        {formatCurrency(day.totalSales)}
+                      </Text>
+                    </View>
+                    <Text
+                      style={[
+                        styles.rowProgress,
+                        active && styles.rowProgressActive,
+                      ]}
+                    >
+                      {formatPercent(Math.min(metrics.goalProgress, 1))}
+                      {metrics.goalProgress > 1 ? '+' : ''} of goal
+                    </Text>
+                  </>
+                );
+              }}
+            </Pressable>
+          );
+        })
+      )}
+    </EditorialPage>
   );
 }
 
 const styles = StyleSheet.create({
-  scroll: {
-    paddingBottom: spacing.xxxl,
-  },
-  centered: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontFamily: fonts.displayRegular,
-    fontSize: 28,
-    color: colors.text,
-    marginBottom: spacing.xxl,
-    letterSpacing: -0.3,
-  },
   row: {
     backgroundColor: colors.surface,
     borderWidth: 1,
