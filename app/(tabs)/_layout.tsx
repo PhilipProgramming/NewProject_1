@@ -27,6 +27,7 @@ export default function MainLayout() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    width: '100%',
     backgroundColor: colors.background,
   },
 });

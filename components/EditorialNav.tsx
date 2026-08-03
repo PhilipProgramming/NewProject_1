@@ -1,12 +1,11 @@
 import { useSegments } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { EditorialNavLink } from '@/components/EditorialNavLink';
 import {
+  NAV_HORIZONTAL_PADDING,
   NAV_ITEM_GAP,
-  NAV_LOGO_GAP,
-  PAGE_HORIZONTAL_PADDING,
 } from '@/constants/pageLayout';
 import { colors, fonts, spacing } from '@/constants/theme';
 
@@ -21,11 +20,8 @@ function resolveActiveTab(segments: string[]): NavTab {
 }
 
 /**
- * Three-column editorial navigation — equal-width side groups mirror around
- * a perfectly centered brand lockup.
- *
- * | Today · History | MAISON DE DONNÉES | Floor · Settings |
- * |                 |      L'ÉTAPE      |                  |
+ * Full-viewport editorial navigation — edge-anchored link groups with a
+ * logo lockup centered in the browser window, independent of page content width.
  */
 export function EditorialNav() {
   const insets = useSafeAreaInsets();
@@ -39,7 +35,7 @@ export function EditorialNav() {
       ]}
     >
       <View style={styles.bar}>
-        <View style={[styles.column, styles.columnLeft]}>
+        <View style={styles.edgeRow}>
           <View style={styles.navGroup}>
             <EditorialNavLink
               href="/(tabs)"
@@ -52,14 +48,7 @@ export function EditorialNav() {
               active={active === 'history'}
             />
           </View>
-        </View>
 
-        <View style={styles.lockup}>
-          <Text style={styles.parent}>Maison de Données</Text>
-          <Text style={styles.appName}>L&apos;Étape</Text>
-        </View>
-
-        <View style={[styles.column, styles.columnRight]}>
           <View style={styles.navGroup}>
             <EditorialNavLink
               href="/(tabs)/floor"
@@ -73,6 +62,11 @@ export function EditorialNav() {
             />
           </View>
         </View>
+
+        <View style={styles.lockup} pointerEvents="none">
+          <Text style={styles.parent}>Maison de Données</Text>
+          <Text style={styles.appName}>L&apos;Étape</Text>
+        </View>
       </View>
     </View>
   );
@@ -80,30 +74,33 @@ export function EditorialNav() {
 
 const styles = StyleSheet.create({
   shell: {
+    width: '100%',
+    alignSelf: 'stretch',
     backgroundColor: colors.background,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
     paddingBottom: spacing.md,
-    paddingHorizontal: PAGE_HORIZONTAL_PADDING,
+    ...(Platform.OS === 'web'
+      ? {
+          position: 'relative' as const,
+          left: 0,
+          right: 0,
+        }
+      : {}),
   },
   bar: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    position: 'relative',
     width: '100%',
+    minHeight: 36,
+    justifyContent: 'center',
   },
-  column: {
-    flex: 1,
+  edgeRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: 18,
-  },
-  columnLeft: {
-    justifyContent: 'flex-end',
-    paddingRight: NAV_LOGO_GAP,
-  },
-  columnRight: {
-    justifyContent: 'flex-start',
-    paddingLeft: NAV_LOGO_GAP,
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingHorizontal: NAV_HORIZONTAL_PADDING,
+    zIndex: 1,
   },
   navGroup: {
     flexDirection: 'row',
@@ -111,9 +108,12 @@ const styles = StyleSheet.create({
     gap: NAV_ITEM_GAP,
   },
   lockup: {
-    flexShrink: 0,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
     alignItems: 'center',
-    alignSelf: 'flex-start',
+    zIndex: 0,
   },
   parent: {
     fontFamily: fonts.display,

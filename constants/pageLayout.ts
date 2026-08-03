@@ -36,3 +36,6 @@ export const NAV_ITEM_GAP = spacing.lg;
 
 /** Space between each nav group and the centered logo lockup. */
 export const NAV_LOGO_GAP = spacing.xl;
+
+/** Full-width nav inset from viewport edges (24–40px). */
+export const NAV_HORIZONTAL_PADDING = PAGE_HORIZONTAL_PADDING;
