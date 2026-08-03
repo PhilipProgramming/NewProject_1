@@ -8,13 +8,13 @@ import {
 } from 'react-native';
 
 import { EditorialPace } from '@/components/EditorialPace';
+import { AnimatedSalesValue } from '@/components/AnimatedSalesValue';
 import { PageDate } from '@/components/PageDate';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { ScreenBackground } from '@/components/ScreenBackground';
 import { useAppState } from '@/context/AppContext';
 import { useTodayMetrics } from '@/hooks/useTodayMetrics';
 import { colors, fonts, spacing } from '@/constants/theme';
-import { formatCurrency } from '@/lib/format';
 import { generateDailyObservation } from '@/lib/observations';
 
 /**
@@ -48,9 +48,11 @@ export default function TodayScreen() {
 
         <View style={styles.heroBlock}>
           <Text style={styles.heroLabel}>Sales</Text>
-          <Text style={styles.heroValue}>
-            {hasData ? formatCurrency(activity.totalSales) : '—'}
-          </Text>
+          <AnimatedSalesValue
+            value={activity.totalSales}
+            active={hasData}
+            style={styles.heroValue}
+          />
         </View>
 
         {hasData ? (
