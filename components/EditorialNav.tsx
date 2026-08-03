@@ -1,8 +1,13 @@
 import { useSegments } from 'expo-router';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { EditorialNavLink } from '@/components/EditorialNavLink';
+import {
+  NAV_ITEM_GAP,
+  NAV_LOGO_GAP,
+  PAGE_HORIZONTAL_PADDING,
+} from '@/constants/pageLayout';
 import { colors, fonts, spacing } from '@/constants/theme';
 
 type NavTab = 'today' | 'history' | 'floor' | 'settings';
@@ -16,8 +21,11 @@ function resolveActiveTab(segments: string[]): NavTab {
 }
 
 /**
- * Full-width editorial navigation — Margiela-inspired text bar with centered lockup.
- * Today · History · MAISON DE DONNÉES / L'ÉTAPE · Floor · Settings
+ * Three-column editorial navigation — equal-width side groups mirror around
+ * a perfectly centered brand lockup.
+ *
+ * | Today · History | MAISON DE DONNÉES | Floor · Settings |
+ * |                 |      L'ÉTAPE      |                  |
  */
 export function EditorialNav() {
   const insets = useSafeAreaInsets();
@@ -31,17 +39,19 @@ export function EditorialNav() {
       ]}
     >
       <View style={styles.bar}>
-        <View style={styles.side}>
-          <EditorialNavLink
-            href="/(tabs)"
-            label="Today"
-            active={active === 'today'}
-          />
-          <EditorialNavLink
-            href="/(tabs)/history"
-            label="History"
-            active={active === 'history'}
-          />
+        <View style={[styles.column, styles.columnLeft]}>
+          <View style={styles.navGroup}>
+            <EditorialNavLink
+              href="/(tabs)"
+              label="Today"
+              active={active === 'today'}
+            />
+            <EditorialNavLink
+              href="/(tabs)/history"
+              label="History"
+              active={active === 'history'}
+            />
+          </View>
         </View>
 
         <View style={styles.lockup}>
@@ -49,17 +59,19 @@ export function EditorialNav() {
           <Text style={styles.appName}>L&apos;Étape</Text>
         </View>
 
-        <View style={[styles.side, styles.sideRight]}>
-          <EditorialNavLink
-            href="/(tabs)/floor"
-            label="Floor"
-            active={active === 'floor'}
-          />
-          <EditorialNavLink
-            href="/(tabs)/settings"
-            label="Settings"
-            active={active === 'settings'}
-          />
+        <View style={[styles.column, styles.columnRight]}>
+          <View style={styles.navGroup}>
+            <EditorialNavLink
+              href="/(tabs)/floor"
+              label="Floor"
+              active={active === 'floor'}
+            />
+            <EditorialNavLink
+              href="/(tabs)/settings"
+              label="Settings"
+              active={active === 'settings'}
+            />
+          </View>
         </View>
       </View>
     </View>
@@ -72,28 +84,36 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
     paddingBottom: spacing.md,
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: PAGE_HORIZONTAL_PADDING,
   },
   bar: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    minHeight: 40,
-    ...(Platform.OS === 'web' ? { maxWidth: 1200, width: '100%', alignSelf: 'center' } : {}),
+    width: '100%',
   },
-  side: {
+  column: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.lg,
-    paddingTop: 2,
+    minHeight: 18,
   },
-  sideRight: {
+  columnLeft: {
     justifyContent: 'flex-end',
+    paddingRight: NAV_LOGO_GAP,
+  },
+  columnRight: {
+    justifyContent: 'flex-start',
+    paddingLeft: NAV_LOGO_GAP,
+  },
+  navGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: NAV_ITEM_GAP,
   },
   lockup: {
+    flexShrink: 0,
     alignItems: 'center',
-    paddingHorizontal: spacing.md,
+    alignSelf: 'flex-start',
   },
   parent: {
     fontFamily: fonts.display,
