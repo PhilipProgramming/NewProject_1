@@ -72,7 +72,7 @@ export function buildFloorReportHtml(report: FloorDayReport): string {
       body {
         margin: 0;
         padding: 48px 56px 64px;
-        background: #f5f2ec;
+        background: #ffffff;
         color: #121212;
         font-family: "EB Garamond", "Times New Roman", serif;
         font-size: 13px;
@@ -137,6 +137,11 @@ export function buildFloorReportHtml(report: FloorDayReport): string {
         color: #121212;
         text-align: right;
       }
+
+      .conclusion-section {
+        page-break-before: always;
+        break-before: page;
+      }
     </style>
   </head>
   <body>
@@ -166,14 +171,11 @@ export function buildFloorReportHtml(report: FloorDayReport): string {
       }
     </section>
 
-    <div class="rule"></div>
-
-    <section>
+    <section class="conclusion-section">
       <h2 class="section-title">Conclusion</h2>
       <p class="conclusion">${textToHtml(report.conclusion)}</p>
+      <p class="footer">Maison de Données · L&apos;Étape</p>
     </section>
-
-    <p class="footer">Maison de Données · L&apos;Étape</p>
   </body>
 </html>`;
 }
