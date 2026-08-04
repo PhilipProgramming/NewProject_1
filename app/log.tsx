@@ -1,14 +1,15 @@
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 
+import { EditorialNav } from '@/components/EditorialNav';
 import { EditorialPage } from '@/components/EditorialPage';
 import { NumberField } from '@/components/NumberField';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { useAppState } from '@/context/AppContext';
 import { useTodayMetrics } from '@/hooks/useTodayMetrics';
 import { pageTitleStyles } from '@/constants/typography';
-import { spacing } from '@/constants/theme';
+import { colors, spacing } from '@/constants/theme';
 import { formatDisplayDate } from '@/lib/dates';
 import {
   activityToFormValues,
@@ -67,17 +68,19 @@ export default function LogScreen() {
   }
 
   return (
-    <EditorialPage
-      title="Log"
-      loading={isLoading}
-      keyboardAvoiding
-      headerTrailing={
-        <Text style={pageTitleStyles.date}>
-          {formatDisplayDate(dateKey)}
-        </Text>
-      }
-    >
-      <NumberField
+    <View style={styles.page}>
+      <EditorialNav />
+      <EditorialPage
+        title="Log"
+        loading={isLoading}
+        keyboardAvoiding
+        headerTrailing={
+          <Text style={pageTitleStyles.date}>
+            {formatDisplayDate(dateKey)}
+          </Text>
+        }
+      >
+        <NumberField
         label="Hours worked"
         value={hoursWorked}
         onChangeText={setHoursWorked}
@@ -117,11 +120,16 @@ export default function LogScreen() {
         disabled={isSaving}
         style={styles.saveButton}
       />
-    </EditorialPage>
+      </EditorialPage>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  page: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
   saveButton: {
     marginTop: spacing.lg,
   },

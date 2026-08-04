@@ -62,9 +62,7 @@ export default function RootLayout() {
         <Stack.Screen
           name="log"
           options={{
-            title: '',
-            headerBackTitle: 'Today',
-            headerShadowVisible: false,
+            headerShown: false,
             presentation: 'modal',
           }}
         />
