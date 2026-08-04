@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   },
   rowProgress: {
     fontFamily: fonts.body,
-    fontSize: 13,
+    fontSize: 15,
     color: colors.textMuted,
   },
   rowProgressActive: {
