@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 
 import { MetricCard } from '@/components/MetricCard';
+import { EditorialNav } from '@/components/EditorialNav';
+import { PageTitle } from '@/components/PageTitle';
 import { ProgressBar } from '@/components/ProgressBar';
 import { ScreenBackground } from '@/components/ScreenBackground';
 import { pageTitleStyles } from '@/constants/pageLayout';
@@ -55,17 +57,23 @@ export default function DayDetailScreen() {
 
   if (isLoading) {
     return (
-      <ScreenBackground style={styles.centered}>
-        <ActivityIndicator color={colors.accent} size="large" />
-      </ScreenBackground>
+      <View style={styles.page}>
+        <EditorialNav />
+        <ScreenBackground style={styles.centered}>
+          <ActivityIndicator color={colors.accent} size="large" />
+        </ScreenBackground>
+      </View>
     );
   }
 
   if (!day) {
     return (
-      <ScreenBackground style={styles.centered}>
-        <Text style={styles.notFound}>No data found for this day.</Text>
-      </ScreenBackground>
+      <View style={styles.page}>
+        <EditorialNav />
+        <ScreenBackground style={styles.centered}>
+          <Text style={styles.notFound}>No data found for this day.</Text>
+        </ScreenBackground>
+      </View>
     );
   }
 
@@ -80,14 +88,16 @@ export default function DayDetailScreen() {
   const glanceLabel = isToday ? 'Today at a glance' : 'Day at a glance';
 
   return (
-    <ScreenBackground>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scroll}
-      >
-        <Text style={pageTitleStyles.title}>{formatDisplayDate(dateKey)}</Text>
+    <View style={styles.page}>
+      <EditorialNav />
+      <ScreenBackground>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scroll}
+        >
+          <PageTitle title={formatDisplayDate(dateKey)} />
 
-        <View style={styles.glanceRow}>
+          <View style={styles.glanceRow}>
           <Text style={pageTitleStyles.title}>{glanceLabel}</Text>
           <Text style={styles.percent}>{percentLabel}</Text>
         </View>
@@ -164,14 +174,18 @@ export default function DayDetailScreen() {
           />
         </View>
       </ScrollView>
-    </ScreenBackground>
+      </ScreenBackground>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  page: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
   scroll: {
     paddingBottom: spacing.xxl,
-    paddingTop: spacing.xl,
   },
   centered: {
     justifyContent: 'center',

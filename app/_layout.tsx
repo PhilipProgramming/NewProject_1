@@ -77,7 +77,7 @@ export default function RootLayout() {
         <Stack.Screen
           name="day/[date]"
           options={{
-            title: 'Day detail',
+            headerShown: false,
           }}
         />
         <Stack.Screen
