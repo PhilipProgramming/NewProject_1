@@ -83,7 +83,7 @@ export default function RootLayout() {
         <Stack.Screen
           name="dictionary"
           options={{
-            title: 'Data dictionary',
+            headerShown: false,
           }}
         />
       </Stack>
