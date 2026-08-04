@@ -8,33 +8,26 @@ import {
 } from 'react-native';
 
 import { images } from '@/constants/assets';
+import { pageTitleStyles } from '@/constants/pageLayout';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
-import { formatPercent } from '@/lib/format';
 
 type ProgressBarProps = {
   /** 0–1+ ratio toward goal. */
   progress: number;
-  label?: string;
+  /** Centered status above the track, e.g. "Goal Completed!" */
+  statusLabel: string;
 };
 
 const MARKER_SIZE = 140;
-const TRACK_HEIGHT = 14;
+const TRACK_HEIGHT = 16;
 const TRACK_ROW_HEIGHT = MARKER_SIZE + 8;
 
 /**
- * Goal progress bar with a blueberry marker at the leading edge of progress.
- * Fill and marker share the same pixel width so there is no gap between them.
+ * Editorial goal progress — status label, thick track, blueberry marker.
  */
-export function ProgressBar({
-  progress,
-  label = 'Daily goal progress',
-}: ProgressBarProps) {
+export function ProgressBar({ progress, statusLabel }: ProgressBarProps) {
   const [trackWidth, setTrackWidth] = useState(0);
   const clampedProgress = Math.min(Math.max(progress, 0), 1);
-  const percentLabel =
-    progress >= 1 ? `${formatPercent(1)}+` : formatPercent(progress);
-
-  // Same pixel math for fill and marker — icon center sits on the true progress point.
   const progressPx = trackWidth * clampedProgress;
   const markerLeft = progressPx - MARKER_SIZE / 2;
 
@@ -44,10 +37,7 @@ export function ProgressBar({
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.label}>{label}</Text>
-        <Text style={styles.percent}>{percentLabel}</Text>
-      </View>
+      <Text style={styles.status}>{statusLabel}</Text>
 
       <View style={styles.trackArea}>
         <View style={styles.trackRow} onLayout={handleTrackLayout}>
@@ -70,28 +60,16 @@ export function ProgressBar({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: spacing.lg,
+    marginBottom: spacing.xxxl,
     overflow: 'visible',
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: spacing.sm,
-  },
-  label: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 14,
-    color: colors.text,
-  },
-  percent: {
-    fontFamily: fonts.bodyBold,
-    fontSize: 14,
-    color: colors.accent,
+  status: {
+    ...pageTitleStyles.title,
+    textAlign: 'center',
+    marginBottom: spacing.lg,
   },
   trackArea: {
     overflow: 'visible',
-    // Inset so the marker is not clipped at 0% or 100% on web.
     paddingHorizontal: MARKER_SIZE / 2,
   },
   trackRow: {

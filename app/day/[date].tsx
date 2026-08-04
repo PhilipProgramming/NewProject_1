@@ -10,9 +10,10 @@ import {
 import { MetricCard } from '@/components/MetricCard';
 import { ProgressBar } from '@/components/ProgressBar';
 import { ScreenBackground } from '@/components/ScreenBackground';
+import { pageTitleStyles } from '@/constants/pageLayout';
 import { useAppState } from '@/context/AppContext';
 import { calculateMetrics } from '@/lib/calculations';
-import { formatDisplayDate } from '@/lib/dates';
+import { formatDisplayDate, getTodayKey } from '@/lib/dates';
 import {
   formatCount,
   formatCurrency,
@@ -43,7 +44,6 @@ function toActivityInput(day: {
 
 /**
  * Day detail — read-only breakdown for a single past day.
- * Route param [date] is the YYYY-MM-DD key from History.
  */
 export default function DayDetailScreen() {
   const { date } = useLocalSearchParams<{ date: string }>();
@@ -51,6 +51,7 @@ export default function DayDetailScreen() {
 
   const dateKey = typeof date === 'string' ? date : '';
   const day = days[dateKey];
+  const isToday = dateKey === getTodayKey();
 
   if (isLoading) {
     return (
@@ -70,6 +71,13 @@ export default function DayDetailScreen() {
 
   const activity = toActivityInput(day);
   const metrics = calculateMetrics(activity, settings);
+  const goalComplete = metrics.goalProgress >= 1;
+  const percentLabel =
+    metrics.goalProgress >= 1
+      ? formatPercent(1)
+      : formatPercent(metrics.goalProgress);
+  const statusLabel = goalComplete ? 'Goal Completed!' : 'in progress';
+  const glanceLabel = isToday ? 'Today at a glance' : 'Day at a glance';
 
   return (
     <ScreenBackground>
@@ -77,8 +85,17 @@ export default function DayDetailScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}
       >
-        <Text style={styles.date}>{formatDisplayDate(dateKey)}</Text>
-        <ProgressBar progress={metrics.goalProgress} />
+        <Text style={pageTitleStyles.title}>{formatDisplayDate(dateKey)}</Text>
+
+        <View style={styles.glanceRow}>
+          <Text style={pageTitleStyles.title}>{glanceLabel}</Text>
+          <Text style={styles.percent}>{percentLabel}</Text>
+        </View>
+
+        <ProgressBar
+          progress={metrics.goalProgress}
+          statusLabel={statusLabel}
+        />
 
         <Text style={styles.sectionTitle}>Activity</Text>
         <View style={styles.metricsGrid}>
@@ -154,16 +171,27 @@ export default function DayDetailScreen() {
 const styles = StyleSheet.create({
   scroll: {
     paddingBottom: spacing.xxl,
+    paddingTop: spacing.xl,
   },
   centered: {
     justifyContent: 'center',
     alignItems: 'center',
   },
-  date: {
-    fontFamily: fonts.brandRegular,
-    fontSize: 24,
+  glanceRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+    marginTop: spacing.md,
+    marginBottom: spacing.xl,
+    gap: spacing.md,
+  },
+  percent: {
+    fontFamily: fonts.display,
+    fontSize: 28,
+    lineHeight: 34,
+    letterSpacing: -0.3,
     color: colors.text,
-    marginBottom: spacing.lg,
+    flexShrink: 0,
   },
   notFound: {
     fontFamily: fonts.body,
