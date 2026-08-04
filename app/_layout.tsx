@@ -3,11 +3,6 @@ import {
   EBGaramond_400Regular_Italic,
   EBGaramond_500Medium,
 } from '@expo-google-fonts/eb-garamond';
-import {
-  Inter_400Regular,
-  Inter_500Medium,
-  Inter_600SemiBold,
-} from '@expo-google-fonts/inter';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -17,7 +12,7 @@ import 'react-native-reanimated';
 
 import { AppProvider } from '@/context/AppContext';
 import { FloorProvider } from '@/context/FloorContext';
-import { colors } from '@/constants/theme';
+import { colors, fonts } from '@/constants/theme';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -28,9 +23,6 @@ export default function RootLayout() {
     EBGaramond_400Regular,
     EBGaramond_400Regular_Italic,
     EBGaramond_500Medium,
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
   });
 
   useEffect(() => {
@@ -60,7 +52,7 @@ export default function RootLayout() {
         screenOptions={{
           headerStyle: { backgroundColor: colors.background },
           headerTintColor: colors.text,
-          headerTitleStyle: { fontFamily: 'Inter_500Medium' },
+          headerTitleStyle: { fontFamily: fonts.bodyMedium },
           contentStyle: { backgroundColor: colors.background },
           headerShadowVisible: false,
         }}

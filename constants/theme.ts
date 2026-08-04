@@ -1,36 +1,59 @@
 /**
  * L'Étape editorial design tokens.
- * Warm paper backgrounds, soft charcoal type, typography-led layout.
+ * Warm paper backgrounds, Helvetica Neue UI type, Garamond display.
  */
+
+import { Platform } from 'react-native';
+
+/** Universal text color — all copy unless on navy fills. */
+export const TEXT_COLOR = '#121212';
+
+const helvetica = Platform.select({
+  ios: {
+    regular: 'Helvetica Neue',
+    medium: 'HelveticaNeue-Medium',
+    bold: 'HelveticaNeue-Bold',
+  },
+  android: {
+    regular: 'sans-serif',
+    medium: 'sans-serif-medium',
+    bold: 'sans-serif-bold',
+  },
+  default: {
+    regular: 'Helvetica Neue',
+    medium: 'Helvetica Neue',
+    bold: 'Helvetica Neue',
+  },
+}) as { regular: string; medium: string; bold: string };
 
 export const colors = {
   /** Warm off-white page background. */
   background: '#F5F2EC',
   /** Slightly warmer variant for subtle contrast. */
   backgroundAlt: '#F7F4EF',
-  /** Nearly black — primary text. */
-  text: '#2C2C2C',
-  /** Soft charcoal for secondary copy. */
-  textMuted: '#6B6560',
+  /** Primary text — all UI and display copy on light ground. */
+  text: TEXT_COLOR,
+  /** Secondary labels — same ink for unified editorial tone. */
+  textMuted: TEXT_COLOR,
   /** Hairline rules and quiet borders. */
   border: '#E8E4DC',
-  /** Minimal accent — used sparingly. */
-  accent: '#4A4540',
+  /** Text accent on light backgrounds. */
+  accent: TEXT_COLOR,
   /** Maison de Données navy — hover fills and selected states. */
   brandBlue: '#072A6C',
   /** Text on brandBlue backgrounds. */
   textOnBrand: '#FFFFFF',
   /** Progress and positive signals. */
-  signal: '#3D3D3D',
+  signal: TEXT_COLOR,
   error: '#8B4B4B',
   progressTrack: '#E8E4DC',
-  progressFill: '#2C2C2C',
+  progressFill: TEXT_COLOR,
   /** Tab bar and surfaces on light ground. */
   surface: '#F5F2EC',
   /** @deprecated Use `border` — kept until History/Settings/Log are redesigned. */
   surfaceBorder: '#E8E4DC',
   /** @deprecated Use `accent` — kept until form components are redesigned. */
-  primary: '#4A4540',
+  primary: TEXT_COLOR,
   /** @deprecated Use `background` — kept until +not-found is redesigned. */
   backgroundBottom: '#F5F2EC',
 } as const;
@@ -55,10 +78,10 @@ export const fonts = {
   display: 'EBGaramond_500Medium',
   displayRegular: 'EBGaramond_400Regular',
   displayItalic: 'EBGaramond_400Regular_Italic',
-  /** Clean sans for interface and labels. */
-  body: 'Inter_400Regular',
-  bodyMedium: 'Inter_500Medium',
-  bodyBold: 'Inter_600SemiBold',
+  /** Helvetica Neue for interface and labels. */
+  body: helvetica.regular,
+  bodyMedium: helvetica.medium,
+  bodyBold: helvetica.bold,
   /** @deprecated Use `display` — kept until remaining screens are redesigned. */
   brand: 'EBGaramond_500Medium',
   /** @deprecated Use `displayRegular`. */
