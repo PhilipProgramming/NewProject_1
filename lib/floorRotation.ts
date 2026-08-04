@@ -41,9 +41,12 @@ export function initSessionWithRoster(
 }
 
 /** Assign the current "up" associate to a customer. */
-export function assignCustomer(session: FloorSession): FloorSession {
+export function assignCustomer(
+  session: FloorSession,
+  customerCount: number,
+): FloorSession {
   const [upId, ...rest] = session.rotation;
-  if (!upId) {
+  if (!upId || !Number.isInteger(customerCount) || customerCount < 1) {
     return session;
   }
 
@@ -51,6 +54,7 @@ export function assignCustomer(session: FloorSession): FloorSession {
     id: createFloorId(),
     associateId: upId,
     assignedAt: new Date().toISOString(),
+    customerCount,
   };
 
   return {

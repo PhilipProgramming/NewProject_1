@@ -51,8 +51,8 @@ export default function FloorScreen() {
     <EditorialPage title="Floor" loading={isLoading}>
       <UpNextBlock
         upName={upName}
-        onAssign={() => {
-          void assignCustomer();
+        onAssign={(customerCount) => {
+          void assignCustomer(customerCount);
         }}
         isSaving={isSaving}
       />

@@ -10,6 +10,7 @@ export type ActiveInteraction = {
   id: string;
   associateId: string;
   assignedAt: string;
+  customerCount: number;
 };
 
 export type CompletedInteraction = ActiveInteraction & {

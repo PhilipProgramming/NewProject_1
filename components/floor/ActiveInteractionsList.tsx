@@ -43,7 +43,13 @@ function ActiveRow({
   return (
     <View style={styles.row}>
       <View style={styles.rowMain}>
-        <Text style={styles.name}>{name}</Text>
+        <View style={styles.nameBlock}>
+          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.customerCount}>
+            {interaction.customerCount}{' '}
+            {interaction.customerCount === 1 ? 'customer' : 'customers'}
+          </Text>
+        </View>
         <Text style={styles.elapsed}>{elapsed}</Text>
       </View>
 
@@ -178,11 +184,19 @@ const styles = StyleSheet.create({
   rowMain: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'baseline',
+    alignItems: 'flex-start',
     marginBottom: spacing.md,
+  },
+  nameBlock: {
+    flex: 1,
+    paddingRight: spacing.md,
   },
   name: {
     ...typography.displaySmall,
+  },
+  customerCount: {
+    ...typography.bodyMuted,
+    marginTop: spacing.xs,
   },
   elapsed: {
     ...typography.bodyMuted,

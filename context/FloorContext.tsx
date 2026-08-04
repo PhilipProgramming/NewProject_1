@@ -44,7 +44,7 @@ type FloorContextValue = FloorState & {
   upAssociateId: string | undefined;
   getName: (associateId: string) => string;
   startRoster: (names: string[]) => Promise<void>;
-  assignCustomer: () => Promise<void>;
+  assignCustomer: (customerCount: number) => Promise<void>;
   completeInteraction: (
     interactionId: string,
     outcome: InteractionOutcome,
@@ -151,13 +151,16 @@ export function FloorProvider({ children }: FloorProviderProps) {
     [persistSession],
   );
 
-  const assignCustomer = useCallback(async () => {
-    const next = assignCustomerOp(state.session);
-    if (next === state.session) {
-      return;
-    }
-    await persistSession(next);
-  }, [persistSession, state.session]);
+  const assignCustomer = useCallback(
+    async (customerCount: number) => {
+      const next = assignCustomerOp(state.session, customerCount);
+      if (next === state.session) {
+        return;
+      }
+      await persistSession(next);
+    },
+    [persistSession, state.session],
+  );
 
   const completeInteraction = useCallback(
     async (
