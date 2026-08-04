@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
   error: {
     fontFamily: fonts.body,
-    fontSize: 12,
+    fontSize: 13,
     color: colors.error,
     marginTop: spacing.xs,
   },

@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   },
   meta: {
     fontFamily: fonts.body,
-    fontSize: 12,
+    fontSize: 13,
     color: colors.textMuted,
     textAlign: 'center',
     lineHeight: 20,
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   },
   copyright: {
     fontFamily: fonts.body,
-    fontSize: 11,
+    fontSize: 13,
     color: colors.textMuted,
     textAlign: 'center',
     marginTop: spacing.lg,

@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   },
   nameHint: {
     fontFamily: fonts.body,
-    fontSize: 12,
+    fontSize: 13,
     color: colors.textMuted,
     marginTop: -spacing.sm,
     marginBottom: spacing.lg,
