@@ -98,12 +98,12 @@ const styles = StyleSheet.create({
   },
   rowDate: {
     fontFamily: fonts.bodyMedium,
-    fontSize: 15,
+    fontSize: 17,
     color: colors.text,
   },
   rowSales: {
     fontFamily: fonts.bodyBold,
-    fontSize: 16,
+    fontSize: 18,
     color: colors.accent,
   },
   rowTextActive: {
