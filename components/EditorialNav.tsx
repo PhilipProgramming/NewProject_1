@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   appName: {
     fontFamily: fonts.displayRegular,
     fontSize: 10,
-    color: colors.textMuted,
+    color: colors.text,
     letterSpacing: 2.2,
     textTransform: 'uppercase',
     textAlign: 'center',

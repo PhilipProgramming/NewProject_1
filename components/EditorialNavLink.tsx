@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: fonts.body,
     fontSize: 13,
-    color: colors.textMuted,
+    color: colors.text,
     letterSpacing: 0.4,
   },
   labelActive: {
