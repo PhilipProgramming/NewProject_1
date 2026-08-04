@@ -1,25 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { spacing } from '@/constants/theme';
 
-import { colors, fonts, spacing } from '@/constants/theme';
-
-/** Shared editorial page title — identical on Today, History, Floor, Settings. */
-export const pageTitleStyles = StyleSheet.create({
-  title: {
-    fontFamily: fonts.displayRegular,
-    fontSize: 28,
-    lineHeight: 34,
-    letterSpacing: -0.3,
-    color: colors.text,
-  },
-  date: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    lineHeight: 20,
-    color: colors.textMuted,
-    textAlign: 'right',
-    flexShrink: 0,
-  },
-});
+export { pageTitleStyles } from '@/constants/typography';
 
 /** Vertical gap between page title row and content (24–32px). */
 export const PAGE_CONTENT_GAP = spacing.xl;

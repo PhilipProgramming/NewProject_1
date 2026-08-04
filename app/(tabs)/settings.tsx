@@ -10,7 +10,8 @@ import { PrimaryButton } from '@/components/PrimaryButton';
 import { TextLinkButton } from '@/components/TextLinkButton';
 import { SettingsFooter } from '@/components/SettingsFooter';
 import { useAppState } from '@/context/AppContext';
-import { colors, fonts, spacing } from '@/constants/theme';
+import { typography } from '@/constants/typography';
+import { spacing } from '@/constants/theme';
 import type { AssociateRole } from '@/types/models';
 
 /**
@@ -86,18 +87,12 @@ export default function SettingsScreen() {
           onChangeText={setAssociateName}
           placeholder="Alex"
         />
-        <Text style={styles.nameHint}>
-          Shown as a greeting on the Dashboard.
-        </Text>
 
         <RolePicker
           label="Your role"
           value={role}
           onChange={setRole}
         />
-        <Text style={styles.nameHint}>
-          Sets base hourly pay: $2 for associates, $4 for team leads.
-        </Text>
 
         <NumberField
           label="Daily sales goal ($)"
@@ -141,13 +136,6 @@ const styles = StyleSheet.create({
   form: {
     flex: 1,
   },
-  nameHint: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    color: colors.textMuted,
-    marginTop: -spacing.sm,
-    marginBottom: spacing.lg,
-  },
   saveButton: {
     marginTop: spacing.lg,
   },
@@ -155,9 +143,7 @@ const styles = StyleSheet.create({
     marginTop: spacing.xl,
   },
   error: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    color: colors.error,
+    ...typography.error,
     marginTop: spacing.md,
     textAlign: 'center',
   },

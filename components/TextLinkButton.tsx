@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, type ViewStyle } from 'react-native';
 
-import { colors, fonts, radius, spacing } from '@/constants/theme';
+import { buttonStyles } from '@/constants/typography';
+import { colors, radius, spacing } from '@/constants/theme';
 
 type TextLinkButtonProps = {
   label: string;
@@ -22,8 +23,8 @@ export function TextLinkButton({ label, onPress, style }: TextLinkButtonProps) {
       {({ pressed, hovered }) => (
         <Text
           style={[
-            styles.label,
-            (hovered || pressed) && styles.labelActive,
+            buttonStyles.labelAccent,
+            (hovered || pressed) && buttonStyles.labelActive,
           ]}
         >
           {label}
@@ -46,13 +47,5 @@ const styles = StyleSheet.create({
   buttonActive: {
     backgroundColor: colors.brandBlue,
     borderColor: colors.brandBlue,
-  },
-  label: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 15,
-    color: colors.accent,
-  },
-  labelActive: {
-    color: colors.textOnBrand,
   },
 });

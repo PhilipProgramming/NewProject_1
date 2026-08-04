@@ -2,7 +2,12 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { WALK_REASONS } from '@/constants/floorDefaults';
-import { colors, fonts, spacing } from '@/constants/theme';
+import {
+  buttonStyles,
+  sectionLabelSpacing,
+  typography,
+} from '@/constants/typography';
+import { colors, spacing } from '@/constants/theme';
 import { useElapsedLabel } from '@/hooks/useElapsedLabel';
 import type { ActiveInteraction } from '@/types/floor';
 
@@ -55,8 +60,8 @@ function ActiveRow({
             {({ pressed, hovered }) => (
               <Text
                 style={[
-                  styles.actionText,
-                  (hovered || pressed) && styles.actionTextActive,
+                  buttonStyles.label,
+                  (hovered || pressed) && buttonStyles.labelActive,
                 ]}
               >
                 Sale
@@ -74,8 +79,8 @@ function ActiveRow({
             {({ pressed, hovered }) => (
               <Text
                 style={[
-                  styles.actionText,
-                  (hovered || pressed) && styles.actionTextActive,
+                  buttonStyles.label,
+                  (hovered || pressed) && buttonStyles.labelActive,
                 ]}
               >
                 Walk
@@ -95,7 +100,7 @@ function ActiveRow({
                 (hovered || pressed) && styles.reasonActive,
               ]}
             >
-              <Text style={styles.reasonText}>{reason}</Text>
+              <Text style={buttonStyles.labelAccent}>{reason}</Text>
             </Pressable>
           ))}
           <Pressable onPress={onWalkCancel}>
@@ -156,17 +161,12 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xl,
   },
   sectionLabel: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    color: colors.textMuted,
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
+    ...typography.sectionLabel,
+    ...sectionLabelSpacing,
     marginBottom: spacing.lg,
   },
   empty: {
-    fontFamily: fonts.body,
-    fontSize: 15,
-    color: colors.textMuted,
+    ...typography.bodyMuted,
     lineHeight: 24,
   },
   row: {
@@ -182,14 +182,10 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   name: {
-    fontFamily: fonts.displayRegular,
-    fontSize: 24,
-    color: colors.text,
+    ...typography.displaySmall,
   },
   elapsed: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    color: colors.textMuted,
+    ...typography.bodyMuted,
   },
   actions: {
     flexDirection: 'row',
@@ -206,21 +202,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.brandBlue,
     borderColor: colors.brandBlue,
   },
-  actionText: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 14,
-    color: colors.text,
-  },
-  actionTextActive: {
-    color: colors.textOnBrand,
-  },
   walkPicker: {
     gap: spacing.sm,
   },
   walkLabel: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    color: colors.textMuted,
+    ...typography.sectionLabel,
     marginBottom: spacing.xs,
   },
   reason: {
@@ -228,16 +214,8 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs,
   },
   reasonActive: {},
-  reasonText: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    color: colors.text,
-    textDecorationLine: 'underline',
-  },
   cancel: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    color: colors.textMuted,
+    ...buttonStyles.labelAccent,
     marginTop: spacing.sm,
     textDecorationLine: 'underline',
   },

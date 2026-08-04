@@ -1,7 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { PrimaryButton } from '@/components/PrimaryButton';
-import { colors, fonts, spacing } from '@/constants/theme';
+import {
+  sectionLabelSpacing,
+  typography,
+} from '@/constants/typography';
+import { colors, spacing } from '@/constants/theme';
 
 type UpNextBlockProps = {
   upName: string | null;
@@ -34,23 +38,15 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xxl,
   },
   sectionLabel: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    color: colors.textMuted,
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
-    marginBottom: spacing.md,
+    ...typography.sectionLabel,
+    ...sectionLabelSpacing,
   },
   upName: {
-    fontFamily: fonts.displayRegular,
-    fontSize: 32,
-    color: colors.text,
-    lineHeight: 38,
+    ...typography.displayMedium,
     marginBottom: spacing.lg,
   },
   empty: {
-    fontFamily: fonts.displayRegular,
-    fontSize: 24,
+    ...typography.displaySmall,
     color: colors.textMuted,
     marginBottom: spacing.lg,
   },

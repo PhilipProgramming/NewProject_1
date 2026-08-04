@@ -3,7 +3,12 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { TextField } from '@/components/TextField';
-import { colors, fonts, spacing } from '@/constants/theme';
+import {
+  buttonStyles,
+  sectionLabelSpacing,
+  typography,
+} from '@/constants/typography';
+import { colors, spacing } from '@/constants/theme';
 
 type FloorRosterSetupProps = {
   onStart: (names: string[]) => void;
@@ -45,7 +50,7 @@ export function FloorRosterSetup({ onStart, isSaving }: FloorRosterSetupProps) {
       />
 
       <Pressable style={styles.addLink} onPress={handleAdd}>
-        <Text style={styles.addLinkText}>Add to rotation</Text>
+        <Text style={buttonStyles.labelAccent}>Add to rotation</Text>
       </Pressable>
 
       {names.length > 0 ? (
@@ -77,9 +82,7 @@ export function FloorRosterSetup({ onStart, isSaving }: FloorRosterSetupProps) {
 
 const styles = StyleSheet.create({
   intro: {
-    fontFamily: fonts.body,
-    fontSize: 15,
-    color: colors.textMuted,
+    ...typography.bodyMuted,
     lineHeight: 24,
     marginBottom: spacing.xl,
     maxWidth: 480,
@@ -89,22 +92,12 @@ const styles = StyleSheet.create({
     marginTop: -spacing.sm,
     marginBottom: spacing.xl,
   },
-  addLinkText: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 14,
-    color: colors.text,
-    textDecorationLine: 'underline',
-  },
   list: {
     marginBottom: spacing.xl,
   },
   listLabel: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    color: colors.textMuted,
-    marginBottom: spacing.md,
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
+    ...typography.sectionLabel,
+    ...sectionLabelSpacing,
   },
   listRow: {
     flexDirection: 'row',
@@ -115,13 +108,10 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
   },
   listName: {
-    fontFamily: fonts.displayRegular,
-    fontSize: 20,
-    color: colors.text,
+    ...typography.observation,
   },
   remove: {
-    fontFamily: fonts.body,
-    fontSize: 13,
+    ...buttonStyles.labelAccent,
     color: colors.textMuted,
     textDecorationLine: 'underline',
   },

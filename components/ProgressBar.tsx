@@ -8,8 +8,8 @@ import {
 } from 'react-native';
 
 import { images } from '@/constants/assets';
-import { pageTitleStyles } from '@/constants/pageLayout';
-import { colors, fonts, radius, spacing } from '@/constants/theme';
+import { typography } from '@/constants/typography';
+import { colors, radius, spacing } from '@/constants/theme';
 
 type ProgressBarProps = {
   /** 0–1+ ratio toward goal. */
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     overflow: 'visible',
   },
   status: {
-    ...pageTitleStyles.title,
+    ...typography.bodyLarge,
     textAlign: 'center',
     marginBottom: spacing.lg,
   },

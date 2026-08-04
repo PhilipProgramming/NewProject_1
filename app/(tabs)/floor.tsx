@@ -6,7 +6,11 @@ import { RotationList } from '@/components/floor/RotationList';
 import { UpNextBlock } from '@/components/floor/UpNextBlock';
 import { EditorialPage } from '@/components/EditorialPage';
 import { useFloorState } from '@/context/FloorContext';
-import { colors, fonts, spacing } from '@/constants/theme';
+import {
+  sectionLabelSpacing,
+  typography,
+} from '@/constants/typography';
+import { spacing } from '@/constants/theme';
 
 /**
  * Floor — live Up Sheet: rotation queue and active customer interactions.
@@ -87,22 +91,15 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
   },
   completedLabel: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    color: colors.textMuted,
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
+    ...typography.sectionLabel,
+    ...sectionLabelSpacing,
     marginBottom: spacing.xs,
   },
   completedCount: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    color: colors.textMuted,
+    ...typography.bodyMuted,
   },
   error: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    color: colors.error,
+    ...typography.error,
     marginTop: spacing.md,
   },
 });

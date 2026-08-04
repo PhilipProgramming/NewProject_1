@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 
-import { colors, fonts, radius, spacing } from '@/constants/theme';
+import { formFieldStyles } from '@/constants/typography';
+import { colors } from '@/constants/theme';
 
 type TextFieldProps = {
   label: string;
@@ -17,10 +18,10 @@ export function TextField({
   placeholder,
 }: TextFieldProps) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
+    <View style={formFieldStyles.container}>
+      <Text style={formFieldStyles.label}>{label}</Text>
       <TextInput
-        style={styles.input}
+        style={formFieldStyles.input}
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
@@ -31,26 +32,3 @@ export function TextField({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: spacing.md,
-  },
-  label: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 14,
-    color: colors.text,
-    marginBottom: spacing.sm,
-  },
-  input: {
-    fontFamily: fonts.body,
-    fontSize: 18,
-    color: colors.text,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.surfaceBorder,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
-  },
-});

@@ -1,6 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import { colors, fonts, spacing } from '@/constants/theme';
+import {
+  sectionLabelSpacing,
+  typography,
+} from '@/constants/typography';
+import { spacing } from '@/constants/theme';
 
 type RotationListProps = {
   names: string[];
@@ -29,17 +33,11 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xxl,
   },
   sectionLabel: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    color: colors.textMuted,
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
-    marginBottom: spacing.md,
+    ...typography.sectionLabel,
+    ...sectionLabelSpacing,
   },
   name: {
-    fontFamily: fonts.displayRegular,
-    fontSize: 22,
-    color: colors.text,
+    ...typography.displayMedium,
     lineHeight: 32,
     paddingVertical: spacing.xs,
   },

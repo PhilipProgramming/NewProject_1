@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { typeScale, typography } from '@/constants/typography';
 import { colors, fonts, spacing } from '@/constants/theme';
 
 type EmptyStateProps = {
@@ -24,17 +25,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: fonts.bodyBold,
-    fontSize: 18,
+    fontSize: typeScale.fieldInput,
     color: colors.text,
     marginBottom: spacing.sm,
     textAlign: 'center',
   },
   message: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    color: colors.textMuted,
+    ...typography.bodyMuted,
     textAlign: 'center',
-    lineHeight: 20,
     maxWidth: 280,
   },
 });

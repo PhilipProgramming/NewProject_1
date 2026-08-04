@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import { colors, fonts, radius, spacing } from '@/constants/theme';
+import { typography } from '@/constants/typography';
+import { colors, radius, spacing } from '@/constants/theme';
 import type { MetricDefinition } from '@/constants/metricsDictionary';
 
 type DictionaryEntryProps = {
@@ -37,16 +38,11 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
   },
   name: {
-    fontFamily: fonts.bodyBold,
-    fontSize: 16,
-    color: colors.text,
+    ...typography.bodyLarge,
     marginBottom: spacing.xs,
   },
   description: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    color: colors.textMuted,
-    lineHeight: 20,
+    ...typography.bodyMuted,
     marginBottom: spacing.sm,
   },
   formulaBox: {
@@ -56,23 +52,15 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
   formulaLabel: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 11,
+    ...typography.sectionLabel,
     color: colors.accent,
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
     marginBottom: spacing.xs,
   },
   formula: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    color: colors.text,
-    lineHeight: 20,
+    ...typography.body,
   },
   note: {
-    fontFamily: fonts.body,
-    fontSize: 12,
-    color: colors.textMuted,
+    ...typography.hint,
     fontStyle: 'italic',
     lineHeight: 18,
     marginTop: spacing.xs,

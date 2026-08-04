@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { ROLE_LABELS } from '@/constants/defaults';
-import { colors, fonts, radius, spacing } from '@/constants/theme';
+import { buttonStyles, formFieldStyles, FORM_INPUT_MIN_HEIGHT } from '@/constants/typography';
+import { colors, radius, spacing } from '@/constants/theme';
 import type { AssociateRole } from '@/types/models';
 
 type RolePickerProps = {
@@ -18,8 +19,8 @@ export function RolePicker({ label, value, onChange }: RolePickerProps) {
   const roles: AssociateRole[] = ['associate', 'team_lead'];
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
+    <View style={formFieldStyles.container}>
+      <Text style={formFieldStyles.label}>{label}</Text>
       <View style={styles.row}>
         {roles.map((role) => {
           const selected = value === role;
@@ -30,7 +31,11 @@ export function RolePicker({ label, value, onChange }: RolePickerProps) {
               onPress={() => onChange(role)}
             >
               <Text
-                style={[styles.optionText, selected && styles.optionTextSelected]}
+                style={[
+                  buttonStyles.label,
+                  styles.optionText,
+                  selected && styles.optionTextSelected,
+                ]}
               >
                 {ROLE_LABELS[role]}
               </Text>
@@ -43,15 +48,6 @@ export function RolePicker({ label, value, onChange }: RolePickerProps) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: spacing.md,
-  },
-  label: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 14,
-    color: colors.text,
-    marginBottom: spacing.sm,
-  },
   row: {
     flexDirection: 'row',
     gap: spacing.sm,
@@ -62,22 +58,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.surfaceBorder,
     borderRadius: radius.md,
-    paddingVertical: spacing.md,
     paddingHorizontal: spacing.sm,
     alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: FORM_INPUT_MIN_HEIGHT,
   },
   optionSelected: {
     borderColor: colors.brandBlue,
     backgroundColor: colors.brandBlue,
   },
   optionText: {
-    fontFamily: fonts.body,
-    fontSize: 13,
     color: colors.textMuted,
     textAlign: 'center',
   },
   optionTextSelected: {
-    fontFamily: fonts.bodyBold,
     color: colors.textOnBrand,
   },
 });

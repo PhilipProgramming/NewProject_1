@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, type ViewStyle } from 'react-native';
 
-import { colors, fonts, spacing } from '@/constants/theme';
+import { buttonStyles } from '@/constants/typography';
+import { colors, spacing } from '@/constants/theme';
 
 type PrimaryButtonProps = {
   label: string;
@@ -30,8 +31,8 @@ export function PrimaryButton({
       {({ pressed, hovered }) => (
         <Text
           style={[
-            styles.label,
-            (hovered || pressed) && styles.labelActive,
+            buttonStyles.label,
+            (hovered || pressed) && buttonStyles.labelActive,
           ]}
         >
           {label}
@@ -56,14 +57,5 @@ const styles = StyleSheet.create({
   },
   disabled: {
     opacity: 0.4,
-  },
-  label: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 14,
-    color: colors.text,
-    letterSpacing: 0.2,
-  },
-  labelActive: {
-    color: colors.textOnBrand,
   },
 });

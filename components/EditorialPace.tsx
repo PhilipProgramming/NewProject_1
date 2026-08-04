@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import { colors, fonts, spacing } from '@/constants/theme';
+import { sectionLabelSpacing, typography } from '@/constants/typography';
+import { colors, spacing } from '@/constants/theme';
 import { formatPercent } from '@/lib/format';
 
 type EditorialPaceProps = {
@@ -30,17 +31,12 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xxxl,
   },
   label: {
-    fontFamily: fonts.body,
-    fontSize: 16,
-    color: colors.textMuted,
-    marginBottom: spacing.xs,
+    ...typography.sectionLabel,
+    ...sectionLabelSpacing,
   },
   value: {
-    fontFamily: fonts.display,
-    fontSize: 36,
-    color: colors.text,
+    ...typography.displaySecondary,
     marginBottom: spacing.md,
-    lineHeight: 40,
   },
   track: {
     height: 2,

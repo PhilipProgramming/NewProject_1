@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import { typeScale, typography } from '@/constants/typography';
 import { colors, fonts, spacing } from '@/constants/theme';
 
 /** Centered editorial footer — Settings page only. */
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
   },
   line: {
     fontFamily: fonts.display,
-    fontSize: 13,
+    fontSize: typeScale.sectionLabel,
     color: colors.textMuted,
     letterSpacing: 2,
     textTransform: 'uppercase',
@@ -41,17 +42,13 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
   meta: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    color: colors.textMuted,
+    ...typography.hint,
     textAlign: 'center',
     lineHeight: 20,
     marginTop: spacing.xs,
   },
   copyright: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    color: colors.textMuted,
+    ...typography.hint,
     textAlign: 'center',
     marginTop: spacing.lg,
     letterSpacing: 0.3,

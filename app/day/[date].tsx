@@ -12,7 +12,11 @@ import { EditorialNav } from '@/components/EditorialNav';
 import { PageTitle } from '@/components/PageTitle';
 import { ProgressBar } from '@/components/ProgressBar';
 import { ScreenBackground } from '@/components/ScreenBackground';
-import { pageTitleStyles } from '@/constants/pageLayout';
+import { PAGE_CONTENT_GAP } from '@/constants/pageLayout';
+import {
+  sectionLabelSpacing,
+  typography,
+} from '@/constants/typography';
 import { useAppState } from '@/context/AppContext';
 import { calculateMetrics } from '@/lib/calculations';
 import { formatDisplayDate, getTodayKey } from '@/lib/dates';
@@ -24,7 +28,7 @@ import {
   formatHours,
   formatPercent,
 } from '@/lib/format';
-import { colors, fonts, spacing } from '@/constants/theme';
+import { colors, spacing } from '@/constants/theme';
 import type { ActivityInput } from '@/types/models';
 
 /** Ensure older saved days without hoursWorked still calculate correctly. */
@@ -97,83 +101,83 @@ export default function DayDetailScreen() {
         >
           <PageTitle title={formatDisplayDate(dateKey)} />
 
-          <View style={styles.glanceRow}>
-          <Text style={pageTitleStyles.title}>{glanceLabel}</Text>
-          <Text style={styles.percent}>{percentLabel}</Text>
-        </View>
+          <View style={[styles.content, styles.glanceRow]}>
+            <Text style={styles.glanceLabel}>{glanceLabel}</Text>
+            <Text style={styles.percent}>{percentLabel}</Text>
+          </View>
 
-        <ProgressBar
-          progress={metrics.goalProgress}
-          statusLabel={statusLabel}
-        />
+          <ProgressBar
+            progress={metrics.goalProgress}
+            statusLabel={statusLabel}
+          />
 
-        <Text style={styles.sectionTitle}>Activity</Text>
-        <View style={styles.metricsGrid}>
-          <MetricCard
-            label="Hours worked"
-            value={formatHours(activity.hoursWorked)}
-          />
-          <MetricCard
-            label="Total sales"
-            value={formatCurrency(day.totalSales)}
-          />
-          <MetricCard
-            label="Transactions"
-            value={formatCount(day.transactions)}
-          />
-          <MetricCard
-            label="Shoes sold"
-            value={formatCount(day.shoesSold)}
-          />
-          <MetricCard
-            label="Accessories"
-            value={formatCount(day.accessoriesSold)}
-          />
-        </View>
+          <Text style={styles.sectionTitle}>Activity</Text>
+          <View style={styles.metricsGrid}>
+            <MetricCard
+              label="Hours worked"
+              value={formatHours(activity.hoursWorked)}
+            />
+            <MetricCard
+              label="Total sales"
+              value={formatCurrency(day.totalSales)}
+            />
+            <MetricCard
+              label="Transactions"
+              value={formatCount(day.transactions)}
+            />
+            <MetricCard
+              label="Shoes sold"
+              value={formatCount(day.shoesSold)}
+            />
+            <MetricCard
+              label="Accessories"
+              value={formatCount(day.accessoriesSold)}
+            />
+          </View>
 
-        <Text style={styles.sectionTitle}>Calculated</Text>
-        <View style={styles.metricsGrid}>
-          <MetricCard
-            label="Avg transaction"
-            value={formatCurrency(metrics.averageTransactionValue)}
-          />
-          <MetricCard
-            label="Commission"
-            value={formatCurrency(metrics.commissionEarned)}
-          />
-          <MetricCard
-            label="Attachment rate"
-            value={formatFar(metrics.far)}
-          />
-          <MetricCard
-            label="Goal progress"
-            value={formatPercent(metrics.goalProgress)}
-          />
-        </View>
+          <Text style={styles.sectionTitle}>Calculated</Text>
+          <View style={styles.metricsGrid}>
+            <MetricCard
+              label="Avg transaction"
+              value={formatCurrency(metrics.averageTransactionValue)}
+            />
+            <MetricCard
+              label="Commission"
+              value={formatCurrency(metrics.commissionEarned)}
+            />
+            <MetricCard
+              label="Attachment rate"
+              value={formatFar(metrics.far)}
+            />
+            <MetricCard
+              label="Goal progress"
+              value={formatPercent(metrics.goalProgress)}
+            />
+          </View>
 
-        <Text style={styles.sectionTitle}>Earnings</Text>
-        <View style={styles.metricsGrid}>
-          <MetricCard
-            label="Base rate"
-            value={formatCurrency(metrics.baseHourlyRate) + '/hr'}
-          />
-          <MetricCard
-            label="Base pay"
-            value={formatCurrency(metrics.basePay)}
-          />
-          <MetricCard
-            label="Total earnings"
-            value={formatCurrency(metrics.totalEarnings)}
-          />
-          <MetricCard
-            label="Effective rate"
-            value={formatHourlyRate(
-              metrics.effectiveHourlyRate,
-              activity.hoursWorked,
-            )}
-          />
-        </View>
-      </ScrollView>
+          <Text style={styles.sectionTitle}>Earnings</Text>
+          <View style={styles.metricsGrid}>
+            <MetricCard
+              label="Base rate"
+              value={formatCurrency(metrics.baseHourlyRate) + '/hr'}
+            />
+            <MetricCard
+              label="Base pay"
+              value={formatCurrency(metrics.basePay)}
+            />
+            <MetricCard
+              label="Total earnings"
+              value={formatCurrency(metrics.totalEarnings)}
+            />
+            <MetricCard
+              label="Effective rate"
+              value={formatHourlyRate(
+                metrics.effectiveHourlyRate,
+                activity.hoursWorked,
+              )}
+            />
+          </View>
+        </ScrollView>
       </ScreenBackground>
     </View>
   );
@@ -187,6 +191,9 @@ const styles = StyleSheet.create({
   scroll: {
     paddingBottom: spacing.xxl,
   },
+  content: {
+    marginTop: PAGE_CONTENT_GAP,
+  },
   centered: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -195,30 +202,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'baseline',
-    marginTop: spacing.md,
     marginBottom: spacing.xl,
     gap: spacing.md,
   },
+  glanceLabel: {
+    ...typography.sectionLabel,
+    flex: 1,
+  },
   percent: {
-    fontFamily: fonts.display,
-    fontSize: 28,
-    lineHeight: 34,
-    letterSpacing: -0.3,
-    color: colors.text,
+    ...typography.displaySecondary,
     flexShrink: 0,
   },
   notFound: {
-    fontFamily: fonts.body,
-    fontSize: 16,
+    ...typography.bodyLarge,
     color: colors.textMuted,
   },
   sectionTitle: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 14,
-    color: colors.textMuted,
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-    marginBottom: spacing.md,
+    ...typography.sectionLabel,
+    ...sectionLabelSpacing,
     marginTop: spacing.md,
   },
   metricsGrid: {

@@ -6,6 +6,11 @@ import { PageTitle } from '@/components/PageTitle';
 import { ScreenBackground } from '@/components/ScreenBackground';
 import { PAGE_CONTENT_GAP } from '@/constants/pageLayout';
 import {
+  sectionLabelSpacing,
+  typeScale,
+  typography,
+} from '@/constants/typography';
+import {
   DICTIONARY_INTRO,
   getMetricsByCategory,
   METRIC_CATEGORY_LABELS,
@@ -77,26 +82,19 @@ const styles = StyleSheet.create({
   },
   disclaimerText: {
     fontFamily: fonts.bodyMedium,
-    fontSize: 14,
+    fontSize: typeScale.body,
     color: colors.textOnBrand,
     lineHeight: 21,
   },
   subtitle: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    color: colors.textMuted,
-    lineHeight: 20,
+    ...typography.bodyMuted,
     marginBottom: spacing.lg,
   },
   section: {
     marginBottom: spacing.lg,
   },
   sectionTitle: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 14,
-    color: colors.textMuted,
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-    marginBottom: spacing.md,
+    ...typography.sectionLabel,
+    ...sectionLabelSpacing,
   },
 });
