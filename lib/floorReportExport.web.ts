@@ -1,5 +1,6 @@
 import { buildFloorDayReport } from '@/lib/floorReport';
 import { buildFloorReportHtml } from '@/lib/floorReportHtml';
+import { nextFloorReportId } from '@/lib/floorReportId';
 import type { FloorSession } from '@/types/floor';
 
 /** Web — open the editorial report and trigger the browser print/save dialog. */
@@ -7,7 +8,12 @@ export async function exportFloorDayReport(
   session: FloorSession,
   clientName: string,
 ): Promise<void> {
-  const report = buildFloorDayReport(session, clientName);
+  const generatedAt = new Date();
+  const reportId = await nextFloorReportId(session.date);
+  const report = buildFloorDayReport(session, clientName, {
+    reportId,
+    generatedAt,
+  });
   const html = buildFloorReportHtml(report);
 
   const printWindow = window.open('', '_blank');

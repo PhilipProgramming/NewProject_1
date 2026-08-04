@@ -3,6 +3,7 @@ import * as Sharing from 'expo-sharing';
 
 import { buildFloorDayReport } from '@/lib/floorReport';
 import { buildFloorReportHtml } from '@/lib/floorReportHtml';
+import { nextFloorReportId } from '@/lib/floorReportId';
 import type { FloorSession } from '@/types/floor';
 
 /** iOS/Android — generate a PDF file and open the native share sheet. */
@@ -10,7 +11,12 @@ export async function exportFloorDayReport(
   session: FloorSession,
   clientName: string,
 ): Promise<void> {
-  const report = buildFloorDayReport(session, clientName);
+  const generatedAt = new Date();
+  const reportId = await nextFloorReportId(session.date);
+  const report = buildFloorDayReport(session, clientName, {
+    reportId,
+    generatedAt,
+  });
   const html = buildFloorReportHtml(report);
 
   const { uri } = await Print.printToFileAsync({

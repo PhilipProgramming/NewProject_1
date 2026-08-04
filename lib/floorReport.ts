@@ -12,15 +12,15 @@ export type AssociateReport = {
   sales: number;
   walks: number;
   conversionRate: number;
-  walkReasons: WalkReasonStat[];
   summaryParagraph: string;
-  walkReasonParagraph: string | null;
 };
 
 export type FloorDayReport = {
   clientName: string;
-  dateLabel: string;
+  displayDate: string;
+  generatedTime: string;
   dateKey: string;
+  reportId: string;
   totalCustomerParties: number;
   totalSales: number;
   totalWalks: number;
@@ -30,6 +30,11 @@ export type FloorDayReport = {
   conclusion: string;
 };
 
+export type FloorReportMeta = {
+  reportId: string;
+  generatedAt: Date;
+};
+
 export function formatReportPercent(value: number): string {
   if (!Number.isFinite(value) || value <= 0) {
     return '0%';
@@ -37,12 +42,25 @@ export function formatReportPercent(value: number): string {
   return `${value.toFixed(1)}%`;
 }
 
-export function formatReportDate(dateKey: string): string {
-  const [year, month, day] = dateKey.split('-');
+export function formatReportDisplayDate(dateKey: string): string {
+  const [year, month, day] = dateKey.split('-').map(Number);
   if (!year || !month || !day) {
     return dateKey;
   }
-  return `${day}-${month}-${year}`;
+  const date = new Date(year, month - 1, day);
+  return date.toLocaleDateString(undefined, {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+export function formatReportGeneratedTime(date: Date): string {
+  return date.toLocaleTimeString(undefined, {
+    hour: 'numeric',
+    minute: '2-digit',
+  });
 }
 
 function aggregateWalkReasons(
@@ -63,6 +81,27 @@ function aggregateWalkReasons(
     .sort((a, b) => b.count - a.count || a.reason.localeCompare(b.reason));
 }
 
+type OpenerVariant = 0 | 1 | 2;
+
+function partyLabel(count: number): string {
+  return count === 1 ? 'party' : 'parties';
+}
+
+function openWithVariant(
+  name: string,
+  parties: number,
+  variant: OpenerVariant,
+): string {
+  const label = partyLabel(parties);
+  if (variant === 1) {
+    return `${name} helped ${parties} customer ${label} today`;
+  }
+  if (variant === 2) {
+    return `${name} worked with ${parties} customer ${label} today`;
+  }
+  return `${name} assisted ${parties} customer ${label} today`;
+}
+
 function buildAssociateSummary(
   name: string,
   parties: number,
@@ -70,48 +109,26 @@ function buildAssociateSummary(
   walks: number,
   conversionRate: number,
   topWalkReason: string | null,
+  variant: OpenerVariant,
 ): string {
   if (parties === 0) {
     return `${name} recorded no completed customer interactions today.`;
   }
 
+  const opener = openWithVariant(name, parties, variant);
+
   if (walks === 0 && sales > 0) {
-    return `${name} assisted ${parties} customer ${
-      parties === 1 ? 'party' : 'parties'
-    } today and converted every recorded interaction into a sale.`;
+    return `${opener} and converted every recorded interaction into a sale.`;
   }
 
   if (sales === 0 && walks > 0) {
     const reasonText = topWalkReason ? `"${topWalkReason}"` : 'not recorded';
-    return `${name} assisted ${parties} customer ${
-      parties === 1 ? 'party' : 'parties'
-    } today. None resulted in a completed sale. The most common reason recorded was ${reasonText}.`;
+    return `${opener}. None resulted in a completed sale. The most common reason recorded was ${reasonText}.`;
   }
 
-  return `${name} assisted ${parties} customer ${
-    parties === 1 ? 'party' : 'parties'
-  } today. The day concluded with ${sales} ${
+  return `${opener}. The day concluded with ${sales} ${
     sales === 1 ? 'sale' : 'sales'
   } and ${walks} ${walks === 1 ? 'walk' : 'walks'}, resulting in a conversion rate of ${formatReportPercent(conversionRate)}.`;
-}
-
-function buildWalkReasonParagraph(reasons: WalkReasonStat[]): string | null {
-  if (reasons.length === 0) {
-    return null;
-  }
-
-  if (reasons.length === 1) {
-    const [only] = reasons;
-    return `${only.count} customer ${
-      only.count === 1 ? 'party left' : 'parties left'
-    } due to ${only.reason}.`;
-  }
-
-  const topThree = reasons.slice(0, 3);
-  const bullets = topThree
-    .map((item) => `• ${item.reason} (${item.count})`)
-    .join('\n');
-  return `Walk reasons included:\n${bullets}`;
 }
 
 function buildConclusion(report: Omit<FloorDayReport, 'conclusion'>): string {
@@ -169,6 +186,7 @@ function buildConclusion(report: Omit<FloorDayReport, 'conclusion'>): string {
 export function buildFloorDayReport(
   session: FloorSession,
   clientName: string,
+  meta: FloorReportMeta,
 ): FloorDayReport {
   const completed = session.completed;
   const totalCustomerParties = completed.reduce(
@@ -181,6 +199,7 @@ export function buildFloorDayReport(
     totalCustomerParties > 0 ? (totalSales / totalCustomerParties) * 100 : 0;
   const walkReasons = aggregateWalkReasons(completed);
 
+  let associateIndex = 0;
   const associates = session.roster
     .map((associate) => {
       const interactions = completed.filter(
@@ -201,6 +220,8 @@ export function buildFloorDayReport(
       const associateWalkReasons = aggregateWalkReasons(
         interactions.filter((item) => item.outcome === 'walk'),
       );
+      const variant = (associateIndex % 3) as OpenerVariant;
+      associateIndex += 1;
 
       return {
         associateId: associate.id,
@@ -209,7 +230,6 @@ export function buildFloorDayReport(
         sales,
         walks,
         conversionRate,
-        walkReasons: associateWalkReasons,
         summaryParagraph: buildAssociateSummary(
           associate.name,
           customerParties,
@@ -217,16 +237,18 @@ export function buildFloorDayReport(
           walks,
           conversionRate,
           associateWalkReasons[0]?.reason ?? null,
+          variant,
         ),
-        walkReasonParagraph: buildWalkReasonParagraph(associateWalkReasons),
       } satisfies AssociateReport;
     })
     .filter((item): item is AssociateReport => item !== null);
 
   const base = {
     clientName: clientName.trim() || 'Maison de Données',
-    dateLabel: formatReportDate(session.date),
+    displayDate: formatReportDisplayDate(session.date),
+    generatedTime: formatReportGeneratedTime(meta.generatedAt),
     dateKey: session.date,
+    reportId: meta.reportId,
     totalCustomerParties,
     totalSales,
     totalWalks,
