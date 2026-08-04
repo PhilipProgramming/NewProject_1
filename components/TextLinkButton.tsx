@@ -7,18 +7,26 @@ type TextLinkButtonProps = {
   label: string;
   onPress: () => void;
   style?: ViewStyle;
+  disabled?: boolean;
 };
 
 /** Secondary navigation button — navy fill on hover/press like PrimaryButton. */
-export function TextLinkButton({ label, onPress, style }: TextLinkButtonProps) {
+export function TextLinkButton({
+  label,
+  onPress,
+  style,
+  disabled = false,
+}: TextLinkButtonProps) {
   return (
     <Pressable
       style={({ pressed, hovered }) => [
         styles.button,
-        (hovered || pressed) && styles.buttonActive,
+        (hovered || pressed) && !disabled && styles.buttonActive,
+        disabled && styles.disabled,
         style,
       ]}
       onPress={onPress}
+      disabled={disabled}
     >
       {({ pressed, hovered }) => (
         <Text
@@ -47,5 +55,8 @@ const styles = StyleSheet.create({
   buttonActive: {
     backgroundColor: colors.brandBlue,
     borderColor: colors.brandBlue,
+  },
+  disabled: {
+    opacity: 0.4,
   },
 });

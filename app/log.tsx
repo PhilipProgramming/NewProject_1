@@ -81,45 +81,45 @@ export default function LogScreen() {
         }
       >
         <NumberField
-        label="Hours worked"
-        value={hoursWorked}
-        onChangeText={setHoursWorked}
-        keyboardType="decimal-pad"
-        error={errors.hoursWorked}
-      />
-      <NumberField
-        label="Total sales amount"
-        value={totalSales}
-        onChangeText={setTotalSales}
-        prefix="$"
-        keyboardType="decimal-pad"
-        error={errors.totalSales}
-      />
-      <NumberField
-        label="Number of transactions"
-        value={transactions}
-        onChangeText={setTransactions}
-        error={errors.transactions}
-      />
-      <NumberField
-        label="Number of shoes sold"
-        value={shoesSold}
-        onChangeText={setShoesSold}
-        error={errors.shoesSold}
-      />
-      <NumberField
-        label="Number of accessories sold"
-        value={accessoriesSold}
-        onChangeText={setAccessoriesSold}
-        error={errors.accessoriesSold}
-      />
+          label="Hours worked"
+          value={hoursWorked}
+          onChangeText={setHoursWorked}
+          keyboardType="decimal-pad"
+          error={errors.hoursWorked}
+        />
+        <NumberField
+          label="Total sales amount"
+          value={totalSales}
+          onChangeText={setTotalSales}
+          prefix="$"
+          keyboardType="decimal-pad"
+          error={errors.totalSales}
+        />
+        <NumberField
+          label="Number of transactions"
+          value={transactions}
+          onChangeText={setTransactions}
+          error={errors.transactions}
+        />
+        <NumberField
+          label="Number of shoes sold"
+          value={shoesSold}
+          onChangeText={setShoesSold}
+          error={errors.shoesSold}
+        />
+        <NumberField
+          label="Number of accessories sold"
+          value={accessoriesSold}
+          onChangeText={setAccessoriesSold}
+          error={errors.accessoriesSold}
+        />
 
-      <PrimaryButton
-        label={isSaving ? 'Saving…' : 'Save today\'s activity'}
-        onPress={handleSave}
-        disabled={isSaving}
-        style={styles.saveButton}
-      />
+        <PrimaryButton
+          label={isSaving ? 'Saving…' : 'Save today\'s activity'}
+          onPress={handleSave}
+          disabled={isSaving}
+          style={styles.saveButton}
+        />
       </EditorialPage>
     </View>
   );

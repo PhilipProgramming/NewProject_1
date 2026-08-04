@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { ActiveInteractionsList } from '@/components/floor/ActiveInteractionsList';
+import { CompleteDayReport } from '@/components/floor/CompleteDayReport';
 import { FloorRosterSetup } from '@/components/floor/FloorRosterSetup';
 import { RotationList } from '@/components/floor/RotationList';
 import { UpNextBlock } from '@/components/floor/UpNextBlock';
 import { EditorialPage } from '@/components/EditorialPage';
+import { useAppState } from '@/context/AppContext';
 import { useFloorState } from '@/context/FloorContext';
 import {
   sectionLabelSpacing,
@@ -16,6 +18,7 @@ import { spacing } from '@/constants/theme';
  * Floor — live Up Sheet: rotation queue and active customer interactions.
  */
 export default function FloorScreen() {
+  const { settings } = useAppState();
   const {
     session,
     isLoading,
@@ -78,6 +81,10 @@ export default function FloorScreen() {
             {session.completed.length}{' '}
             {session.completed.length === 1 ? 'interaction' : 'interactions'}
           </Text>
+          <CompleteDayReport
+            session={session}
+            clientName={settings.associateName}
+          />
         </View>
       ) : null}
 
