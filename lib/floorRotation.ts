@@ -1,4 +1,7 @@
+import { WALK_REASONS } from '@/constants/floorDefaults';
+import { VALIDATION_LIMITS } from '@/constants/validationLimits';
 import { createFloorId } from '@/lib/floorIds';
+import { isWalkReason, sanitizeRosterNames } from '@/lib/validation';
 import type {
   ActiveInteraction,
   CompletedInteraction,
@@ -8,10 +11,10 @@ import type {
 } from '@/types/floor';
 
 export function createAssociatesFromNames(names: string[]): FloorAssociate[] {
-  return names
-    .map((name) => name.trim())
-    .filter(Boolean)
-    .map((name) => ({ id: createFloorId(), name }));
+  return sanitizeRosterNames(names).map((name) => ({
+    id: createFloorId(),
+    name,
+  }));
 }
 
 export function createEmptyFloorSession(date: string): FloorSession {
@@ -46,7 +49,12 @@ export function assignCustomer(
   customerCount: number,
 ): FloorSession {
   const [upId, ...rest] = session.rotation;
-  if (!upId || !Number.isInteger(customerCount) || customerCount < 1) {
+  if (
+    !upId ||
+    !Number.isInteger(customerCount) ||
+    customerCount < VALIDATION_LIMITS.customerCountMin ||
+    customerCount > VALIDATION_LIMITS.customerCountMax
+  ) {
     return session;
   }
 
@@ -77,11 +85,16 @@ export function completeInteraction(
     return session;
   }
 
+  const safeWalkReason =
+    outcome === 'walk' && walkReason && isWalkReason(walkReason)
+      ? walkReason
+      : WALK_REASONS[0];
+
   const completed: CompletedInteraction = {
     ...interaction,
     outcome,
     completedAt: new Date().toISOString(),
-    walkReason: outcome === 'walk' ? walkReason : undefined,
+    walkReason: outcome === 'walk' ? safeWalkReason : undefined,
   };
 
   return {

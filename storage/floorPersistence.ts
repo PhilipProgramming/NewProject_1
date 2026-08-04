@@ -1,31 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { sanitizeFloorSession } from '@/lib/validation';
 import { createEmptyFloorSession } from '@/lib/floorRotation';
 import { STORAGE_KEYS } from '@/storage/keys';
-import type { ActiveInteraction, CompletedInteraction, FloorSession } from '@/types/floor';
-
-function normalizeInteraction<T extends ActiveInteraction>(
-  interaction: T & { customerCount?: number },
-): T {
-  return {
-    ...interaction,
-    customerCount:
-      typeof interaction.customerCount === 'number' &&
-      interaction.customerCount >= 1
-        ? interaction.customerCount
-        : 1,
-  };
-}
-
-function normalizeFloorSession(session: FloorSession): FloorSession {
-  return {
-    ...session,
-    active: session.active.map((item) => normalizeInteraction(item)),
-    completed: session.completed.map((item) =>
-      normalizeInteraction(item as CompletedInteraction),
-    ),
-  };
-}
+import type { FloorSession } from '@/types/floor';
 
 export async function loadFloorSessions(): Promise<
   Record<string, FloorSession>
@@ -35,11 +13,11 @@ export async function loadFloorSessions(): Promise<
     if (!raw) {
       return {};
     }
-    const parsed = JSON.parse(raw) as Record<string, FloorSession>;
+    const parsed = JSON.parse(raw) as Record<string, Partial<FloorSession>>;
     return Object.fromEntries(
       Object.entries(parsed).map(([date, session]) => [
         date,
-        normalizeFloorSession(session),
+        sanitizeFloorSession({ ...session, date }),
       ]),
     );
   } catch {
@@ -53,8 +31,9 @@ export async function loadFloorSession(date: string): Promise<FloorSession> {
 }
 
 export async function saveFloorSession(session: FloorSession): Promise<void> {
+  const sanitized = sanitizeFloorSession(session);
   const sessions = await loadFloorSessions();
-  sessions[session.date] = session;
+  sessions[sanitized.date] = sanitized;
   await AsyncStorage.setItem(
     STORAGE_KEYS.floorSessions,
     JSON.stringify(sessions),

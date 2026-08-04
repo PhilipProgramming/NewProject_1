@@ -1,6 +1,10 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { formFieldStyles } from '@/constants/typography';
+import {
+  sanitizeDecimalInput,
+  sanitizeIntegerInput,
+} from '@/lib/validation';
 import { colors } from '@/constants/theme';
 
 type NumberFieldProps = {
@@ -26,6 +30,14 @@ export function NumberField({
   error,
   keyboardType = 'number-pad',
 }: NumberFieldProps) {
+  function handleChangeText(text: string) {
+    const next =
+      keyboardType === 'decimal-pad'
+        ? sanitizeDecimalInput(text)
+        : sanitizeIntegerInput(text);
+    onChangeText(next);
+  }
+
   return (
     <View style={formFieldStyles.container}>
       <Text style={formFieldStyles.label}>{label}</Text>
@@ -34,7 +46,7 @@ export function NumberField({
         <TextInput
           style={formFieldStyles.inputInner}
           value={value}
-          onChangeText={onChangeText}
+          onChangeText={handleChangeText}
           keyboardType={keyboardType}
           placeholder="0"
           placeholderTextColor={colors.textMuted}

@@ -1,6 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { DEFAULT_SETTINGS } from '@/constants/defaults';
+import { VALIDATION_LIMITS } from '@/constants/validationLimits';
+import {
+  isValidDateKey,
+  sanitizeDayActivity,
+  sanitizeSettings,
+} from '@/lib/validation';
+import { sortDateKeysDesc } from '@/lib/dates';
 import { STORAGE_KEYS } from '@/storage/keys';
 import type { DayActivity, Settings } from '@/types/models';
 
@@ -10,14 +17,6 @@ import type { DayActivity, Settings } from '@/types/models';
  * swap this file for an API client without rewriting UI code.
  */
 
-/** Backfill hoursWorked on days saved before V0.2. */
-function normalizeDay(raw: DayActivity): DayActivity {
-  return {
-    ...raw,
-    hoursWorked: raw.hoursWorked ?? 0,
-  };
-}
-
 export async function loadSettings(): Promise<Settings> {
   try {
     const raw = await AsyncStorage.getItem(STORAGE_KEYS.settings);
@@ -25,14 +24,17 @@ export async function loadSettings(): Promise<Settings> {
       return DEFAULT_SETTINGS;
     }
     const parsed = JSON.parse(raw) as Partial<Settings>;
-    return { ...DEFAULT_SETTINGS, ...parsed };
+    return sanitizeSettings(parsed);
   } catch {
     return DEFAULT_SETTINGS;
   }
 }
 
 export async function saveSettings(settings: Settings): Promise<void> {
-  await AsyncStorage.setItem(STORAGE_KEYS.settings, JSON.stringify(settings));
+  await AsyncStorage.setItem(
+    STORAGE_KEYS.settings,
+    JSON.stringify(sanitizeSettings(settings)),
+  );
 }
 
 export async function loadDays(): Promise<Record<string, DayActivity>> {
@@ -41,10 +43,19 @@ export async function loadDays(): Promise<Record<string, DayActivity>> {
     if (!raw) {
       return {};
     }
+
+    const parsed = JSON.parse(raw) as Record<string, Partial<DayActivity>>;
+    const sanitizedEntries = Object.entries(parsed)
+      .filter(([key]) => isValidDateKey(key))
+      .map(([key, day]) => [key, sanitizeDayActivity({ ...day, date: key })] as const);
+
+    const sortedKeys = sortDateKeysDesc(
+      sanitizedEntries.map(([key]) => key),
+    ).slice(0, VALIDATION_LIMITS.dayHistoryMax);
+
+    const allowed = new Set(sortedKeys);
     return Object.fromEntries(
-      Object.entries(JSON.parse(raw) as Record<string, DayActivity>).map(
-        ([key, day]) => [key, normalizeDay(day)],
-      ),
+      sanitizedEntries.filter(([key]) => allowed.has(key)),
     );
   } catch {
     return {};
@@ -54,7 +65,20 @@ export async function loadDays(): Promise<Record<string, DayActivity>> {
 export async function saveDays(
   days: Record<string, DayActivity>,
 ): Promise<void> {
-  await AsyncStorage.setItem(STORAGE_KEYS.days, JSON.stringify(days));
+  const sanitizedEntries = Object.entries(days)
+    .filter(([key]) => isValidDateKey(key))
+    .map(([key, day]) => [key, sanitizeDayActivity({ ...day, date: key })] as const);
+
+  const sortedKeys = sortDateKeysDesc(
+    sanitizedEntries.map(([key]) => key),
+  ).slice(0, VALIDATION_LIMITS.dayHistoryMax);
+
+  const allowed = new Set(sortedKeys);
+  const sanitized = Object.fromEntries(
+    sanitizedEntries.filter(([key]) => allowed.has(key)),
+  );
+
+  await AsyncStorage.setItem(STORAGE_KEYS.days, JSON.stringify(sanitized));
 }
 
 /** Convenience: load both slices in parallel on app start. */

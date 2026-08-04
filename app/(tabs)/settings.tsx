@@ -12,6 +12,7 @@ import { SettingsFooter } from '@/components/SettingsFooter';
 import { useAppState } from '@/context/AppContext';
 import { typography } from '@/constants/typography';
 import { spacing } from '@/constants/theme';
+import { validateSettingsForm } from '@/lib/validation';
 import type { AssociateRole } from '@/types/models';
 
 /**
@@ -42,30 +43,20 @@ export default function SettingsScreen() {
   }, [isLoading, initialized, settings]);
 
   async function handleSave() {
-    const fieldErrors: typeof errors = {};
+    const result = validateSettingsForm({
+      associateName,
+      dailySalesGoal,
+      commissionRate,
+      role,
+    });
 
-    const goal = Number(dailySalesGoal);
-    if (!Number.isFinite(goal) || goal <= 0) {
-      fieldErrors.dailySalesGoal = 'Enter a goal greater than 0.';
-    }
-
-    const rate = Number(commissionRate);
-    if (!Number.isFinite(rate) || rate < 0 || rate > 100) {
-      fieldErrors.commissionRate = 'Enter a rate between 0 and 100.';
-    }
-
-    setErrors(fieldErrors);
-    if (Object.keys(fieldErrors).length > 0) {
+    setErrors(result.errors);
+    if (!result.data) {
       return;
     }
 
     try {
-      await updateSettings({
-        associateName: associateName.trim(),
-        dailySalesGoal: goal,
-        commissionRate: rate,
-        role,
-      });
+      await updateSettings(result.data);
       Alert.alert('Saved', 'Your settings have been updated.');
     } catch {
       Alert.alert('Save failed', 'Please try again.');

@@ -3,12 +3,14 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { NumberField } from '@/components/NumberField';
 import { PrimaryButton } from '@/components/PrimaryButton';
+import { VALIDATION_LIMITS } from '@/constants/validationLimits';
 import {
   buttonStyles,
   sectionLabelSpacing,
   typography,
 } from '@/constants/typography';
 import { colors, spacing } from '@/constants/theme';
+import { validateCustomerCount } from '@/lib/validation';
 
 type UpNextBlockProps = {
   upName: string | null;
@@ -35,13 +37,13 @@ export function UpNextBlock({ upName, onAssign, isSaving }: UpNextBlockProps) {
   }
 
   function handleConfirm() {
-    const count = Number(customerCount);
-    if (!Number.isFinite(count) || count < 1 || !Number.isInteger(count)) {
-      setError('Enter at least 1 customer.');
+    const result = validateCustomerCount(customerCount);
+    if (!result.data) {
+      setError(result.error);
       return;
     }
 
-    onAssign(count);
+    onAssign(result.data);
     setPendingAssign(false);
     setCustomerCount('');
     setError(undefined);

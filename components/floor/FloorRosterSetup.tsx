@@ -3,12 +3,14 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { TextField } from '@/components/TextField';
+import { VALIDATION_LIMITS } from '@/constants/validationLimits';
 import {
   buttonStyles,
   sectionLabelSpacing,
   typography,
 } from '@/constants/typography';
 import { colors, spacing } from '@/constants/theme';
+import { sanitizePersonName } from '@/lib/validation';
 
 type FloorRosterSetupProps = {
   onStart: (names: string[]) => void;
@@ -21,18 +23,29 @@ type FloorRosterSetupProps = {
 export function FloorRosterSetup({ onStart, isSaving }: FloorRosterSetupProps) {
   const [draftName, setDraftName] = useState('');
   const [names, setNames] = useState<string[]>([]);
+  const [rosterError, setRosterError] = useState<string | undefined>();
 
   function handleAdd() {
-    const trimmed = draftName.trim();
+    const trimmed = sanitizePersonName(draftName.trim());
     if (!trimmed) {
       return;
     }
+
+    if (names.length >= VALIDATION_LIMITS.rosterMaxSize) {
+      setRosterError(
+        `Rotation supports up to ${VALIDATION_LIMITS.rosterMaxSize} associates.`,
+      );
+      return;
+    }
+
     setNames((prev) => [...prev, trimmed]);
     setDraftName('');
+    setRosterError(undefined);
   }
 
   function handleRemove(index: number) {
     setNames((prev) => prev.filter((_, i) => i !== index));
+    setRosterError(undefined);
   }
 
   return (
@@ -48,6 +61,8 @@ export function FloorRosterSetup({ onStart, isSaving }: FloorRosterSetupProps) {
         onChangeText={setDraftName}
         placeholder="Camille"
       />
+
+      {rosterError ? <Text style={styles.rosterError}>{rosterError}</Text> : null}
 
       <Pressable style={styles.addLink} onPress={handleAdd}>
         <Text style={buttonStyles.labelAccent}>Add to rotation</Text>
@@ -86,6 +101,11 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     marginBottom: spacing.xl,
     maxWidth: 480,
+  },
+  rosterError: {
+    ...typography.error,
+    marginTop: -spacing.md,
+    marginBottom: spacing.md,
   },
   addLink: {
     alignSelf: 'flex-start',
